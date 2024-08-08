@@ -37,5 +37,4 @@ def generate_launch_description():
                     parameters=[{"Frame": "Drone4"}]
                 )                 
 
-    
     ])
