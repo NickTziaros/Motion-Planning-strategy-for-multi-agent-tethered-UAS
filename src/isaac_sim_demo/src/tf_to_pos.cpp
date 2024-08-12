@@ -27,7 +27,6 @@ public:
 
 private:
 
-
     void timer_callback()
     {
         std::string quadrotor_frame = "Drone"+this->get_parameter("Quad_Number").as_string();
