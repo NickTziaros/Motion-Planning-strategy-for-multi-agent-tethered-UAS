@@ -19,23 +19,26 @@ def generate_launch_description():
         Node(
                     package='isaac_sim_demo',
                     executable='tf_to_pos_node',
-                    parameters=[{"Frame": "Drone1"}]
+                    namespace='Quadrotor_1',
+                    parameters=[{"Quad_Number": "1"}]
                 ),
         Node(
                     package='isaac_sim_demo',
                     executable='tf_to_pos_node',
-                    parameters=[{"Frame": "Drone2"}]
+                    namespace='Quadrotor_2',
+                    parameters=[{"Quad_Number": "2"}]
                 ) ,
         Node(
                     package='isaac_sim_demo',
                     executable='tf_to_pos_node',
-                    parameters=[{"Frame": "Drone3"}]
+                    namespace='Quadrotor_3',
+                    parameters=[{"Quad_Number": "3"}]
                 ) ,
         Node(
                     package='isaac_sim_demo',
                     executable='tf_to_pos_node',
-                    parameters=[{"Frame": "Drone4"}]
+                    namespace='Quadrotor_4',
+                    parameters=[{"Quad_Number": "4"}]
                 )                 
 
-    
     ])

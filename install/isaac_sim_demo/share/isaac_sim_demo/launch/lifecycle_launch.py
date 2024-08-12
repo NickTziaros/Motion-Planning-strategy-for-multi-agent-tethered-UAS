@@ -27,8 +27,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_1",
-                    # output="screen",
-                    # emulate_tty=True,
+                    output="screen",
+                    emulate_tty=True,
                     parameters=[{"Quadrotor": "Quadrotor_1"}]
                 ),
         Node(
@@ -36,8 +36,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_2",
-                    # output="screen",
-                    # emulate_tty=True,
+                    output="screen",
+                    emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_2"}]
                 ),
@@ -46,8 +46,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_3",
-                    # output="screen",
-                    # emulate_tty=True,
+                    output="screen",
+                    emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_3"}]
                 ),
@@ -56,8 +56,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_4",
-                    # output="screen",
-                    # emulate_tty=True,
+                    output="screen",
+                    emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_4"}]
                 )

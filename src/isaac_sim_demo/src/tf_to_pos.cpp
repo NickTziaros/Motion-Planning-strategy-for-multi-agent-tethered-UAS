@@ -16,9 +16,10 @@ public:
           tf_listener_(tf_buffer_)
     {
 
-        this->declare_parameter("Frame", "Drone0");
+        this->declare_parameter("Quad_Number", "0");
+        std::string quad_num = this->get_parameter("Quad_Number").as_string();
 
-        pub_drone = this->create_publisher<geometry_msgs::msg::PoseStamped>("/Quadrotor_1/goal_pose", 10);
+        pub_drone = this->create_publisher<geometry_msgs::msg::PoseStamped>("/Quadrotor_"+quad_num+"/goal_pose", 10);
 
         timer_ = this->create_wall_timer(
             500ms, std::bind(&TransformListenerNode::timer_callback, this));
@@ -29,9 +30,9 @@ private:
 
     void timer_callback()
     {
-        std::string quadrotor_frame = this->get_parameter("Frame").as_string();
+        std::string quadrotor_frame = "Drone"+this->get_parameter("Quad_Number").as_string();
 
-        publish_pose("base_lik", quadrotor_frame, pub_drone);
+        publish_pose("base_link", quadrotor_frame, pub_drone);
 
     }
 
