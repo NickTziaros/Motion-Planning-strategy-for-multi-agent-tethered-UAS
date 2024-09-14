@@ -12,7 +12,7 @@
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "/home/ubuntu/ros2_ws/build/moveit_task_constructor_visualization/gtest/gtest_main_autogen/include",
 	"MOC_COMPILATION_FILE" : "/home/ubuntu/ros2_ws/build/moveit_task_constructor_visualization/gtest/gtest_main_autogen/mocs_compilation.cpp",
-	"MOC_DEFINITIONS" : [ "BACKWARD_HAS_DW=1", "BOOST_MATH_DISABLE_FLOAT128" ],
+	"MOC_DEFINITIONS" : [ "BOOST_MATH_DISABLE_FLOAT128" ],
 	"MOC_DEPEND_FILTERS" : 
 	[
 		[

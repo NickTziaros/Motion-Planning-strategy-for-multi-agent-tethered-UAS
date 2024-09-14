@@ -328,7 +328,6 @@
 #define __cpp_inline_variables 201606L
 #define __INT_MAX__ 0x7fffffff
 #define __linux__ 1
-#define BACKWARD_HAS_DW 1
 #define __INT64_TYPE__ long int
 #define __FLT_MAX_EXP__ 128
 #define __ORDER_BIG_ENDIAN__ 4321

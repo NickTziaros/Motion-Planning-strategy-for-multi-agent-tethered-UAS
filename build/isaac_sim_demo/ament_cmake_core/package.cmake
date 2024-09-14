@@ -5,7 +5,7 @@ set(isaac_sim_demo_BUILD_DEPENDS "rosidl_default_generators" "rclcpp" "ompl" "na
 set(isaac_sim_demo_BUILDTOOL_DEPENDS "ament_cmake")
 set(isaac_sim_demo_BUILD_EXPORT_DEPENDS "rclcpp" "ompl" "nav_msgs" "geometry_msgs" "Eigen3" "trajectory_msgs" "visualization_msgs" "custom_interfaces" "robot_state_publisher" "moveit_ros_planning_interface" "moveit_visual_tools" "lifecycle_msgs" "rclcpp_lifecycle")
 set(isaac_sim_demo_BUILDTOOL_EXPORT_DEPENDS )
-set(isaac_sim_demo_EXEC_DEPENDS "ros2launch" "rosidl_default_runtime" "rclcpp" "ompl" "nav_msgs" "geometry_msgs" "Eigen3" "trajectory_msgs" "visualization_msgs" "custom_interfaces" "robot_state_publisher" "moveit_ros_planning_interface" "moveit_visual_tools" "lifecycle_msgs" "rclcpp_lifecycle")
+set(isaac_sim_demo_EXEC_DEPENDS "ros2launch" "rosidl_default_runtime" "controller_manager" "moveit_configs_utils" "moveit_ros_move_group" "moveit_ros_visualization" "moveit_ros_warehouse" "moveit_setup_assistant" "rviz2" "rviz_common" "rviz_default_plugins" "warehouse_ros_mongo" "moveit_kinematics" "moveit_planners" "moveit_simple_controller_manager" "tf2_ros" "xacro" "rclcpp" "ompl" "nav_msgs" "geometry_msgs" "Eigen3" "trajectory_msgs" "visualization_msgs" "custom_interfaces" "robot_state_publisher" "moveit_ros_planning_interface" "moveit_visual_tools" "lifecycle_msgs" "rclcpp_lifecycle")
 set(isaac_sim_demo_TEST_DEPENDS "ament_lint_auto" "ament_lint_common")
 set(isaac_sim_demo_GROUP_DEPENDS )
 set(isaac_sim_demo_MEMBER_OF_GROUPS )

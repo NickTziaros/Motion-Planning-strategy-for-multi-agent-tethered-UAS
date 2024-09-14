@@ -4,6 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from moveit_configs_utils import MoveItConfigsBuilder
 
 import os
 
@@ -11,15 +12,32 @@ import os
     
 def generate_launch_description():
     
-    my_package_dir = get_package_share_directory('isaac_sim_demo')
+    # moveit_config = MoveItConfigsBuilder("isaac_twin", package_name="test_moveit_config").to_moveit_configs()
     
+    my_package_dir = get_package_share_directory('isaac_sim_demo')
+    moveit_dir= get_package_share_directory('test_moveit_config')
     tf_to_pos = IncludeLaunchDescription(
       PythonLaunchDescriptionSource([os.path.join(
          my_package_dir, 'launch'),
          '/tf_to_pos_launch.py'])
       )
     
+    # moveit_demo = IncludeLaunchDescription(
+    #   PythonLaunchDescriptionSource([os.path.join(
+    #      moveit_dir, 'launch'),
+    #      '/demo.launch.py'])
+    #   )
+
+    moveit_demo = IncludeLaunchDescription(
+      PythonLaunchDescriptionSource([os.path.join(
+         my_package_dir, 'launch'),
+         '/test_launch.py'])
+      )
+
+
+
     return LaunchDescription([
+        moveit_demo,
         tf_to_pos,
 
         Node(
@@ -27,8 +45,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_1",
-                    output="screen",
-                    emulate_tty=True,
+                    # output="screen",
+                    # emulate_tty=True,
                     parameters=[{"Quadrotor": "Quadrotor_1"}]
                 ),
         Node(
@@ -36,8 +54,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_2",
-                    output="screen",
-                    emulate_tty=True,
+                    # output="screen",
+                    # emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_2"}]
                 ),
@@ -46,8 +64,8 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_3",
-                    output="screen",
-                    emulate_tty=True,
+                    # output="screen",
+                    # emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_3"}]
                 ),
@@ -56,24 +74,10 @@ def generate_launch_description():
                     executable="ompl_lifecycle",
                     name="ompl_controller_node",
                     namespace="Quadrotor_4",
-                    output="screen",
-                    emulate_tty=True,
+                    # output="screen",
+                    # emulate_tty=True,
                     parameters=[
                         {"Quadrotor": "Quadrotor_4"}]
                 )
-        # Node(
-        #             package='rviz2',
-        #             executable='rviz2',
-        #             arguments=['-d', os.path.join(my_package_dir, 'config', 'rviz_config.rviz')]
-        #         ),
 
-                       
-
-
-
-
-
-        # Node(package='isaac_sim_demo',
-        #      executable='StateSubscriber_node',
-        #      )
     ])

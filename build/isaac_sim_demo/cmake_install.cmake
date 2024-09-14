@@ -51,6 +51,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/isaac_sim_demo" TYPE FILE FILES "/home/ubuntu/ros2_ws/src/isaac_sim_demo/.setup_assistant")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/tf_to_pos_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/tf_to_pos_node")
     file(RPATH_CHECK
@@ -151,21 +155,21 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo" TYPE EXECUTABLE FILES "/home/ubuntu/ros2_ws/build/isaac_sim_demo/moveit_test")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo" TYPE EXECUTABLE FILES "/home/ubuntu/ros2_ws/build/isaac_sim_demo/moveit_test_node")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node"
          OLD_RPATH "/home/ubuntu/ros2_ws/install/moveit_ros_planning_interface/lib:/home/ubuntu/ros2_ws/install/moveit_visual_tools/lib:/home/ubuntu/ros2_ws/install/moveit_ros_move_group/lib:/home/ubuntu/ros2_ws/install/moveit_ros_planning/lib:/home/ubuntu/ros2_ws/install/moveit_ros_occupancy_map_monitor/lib:/home/ubuntu/ros2_ws/install/moveit_core/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/home/ubuntu/ros2_ws/install/srdfdom/lib:/opt/ros/humble/lib:/home/ubuntu/ros2_ws/install/moveit_ros_warehouse/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/moveit_test_node")
     endif()
   endif()
 endif()
@@ -186,6 +190,46 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/ompl_lifecycle")
+    endif()
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo"
+         RPATH "")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo" TYPE EXECUTABLE FILES "/home/ubuntu/ros2_ws/build/isaac_sim_demo/cpp_demo")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo"
+         OLD_RPATH "/home/ubuntu/ros2_ws/install/moveit_ros_planning_interface/lib:/home/ubuntu/ros2_ws/install/moveit_visual_tools/lib:/home/ubuntu/ros2_ws/install/moveit_ros_move_group/lib:/home/ubuntu/ros2_ws/install/moveit_ros_planning/lib:/home/ubuntu/ros2_ws/install/moveit_ros_occupancy_map_monitor/lib:/home/ubuntu/ros2_ws/install/moveit_core/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/home/ubuntu/ros2_ws/install/srdfdom/lib:/opt/ros/humble/lib:/home/ubuntu/ros2_ws/install/moveit_ros_warehouse/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:"
+         NEW_RPATH "")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/cpp_demo")
+    endif()
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene"
+         RPATH "")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo" TYPE EXECUTABLE FILES "/home/ubuntu/ros2_ws/build/isaac_sim_demo/spawn_scene")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene"
+         OLD_RPATH "/home/ubuntu/ros2_ws/install/moveit_ros_planning_interface/lib:/home/ubuntu/ros2_ws/install/moveit_visual_tools/lib:/home/ubuntu/ros2_ws/install/moveit_ros_move_group/lib:/home/ubuntu/ros2_ws/install/moveit_ros_planning/lib:/home/ubuntu/ros2_ws/install/moveit_ros_occupancy_map_monitor/lib:/home/ubuntu/ros2_ws/install/moveit_core/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/home/ubuntu/ros2_ws/install/srdfdom/lib:/opt/ros/humble/lib:/home/ubuntu/ros2_ws/install/moveit_ros_warehouse/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:"
+         NEW_RPATH "")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/isaac_sim_demo/spawn_scene")
     endif()
   endif()
 endif()

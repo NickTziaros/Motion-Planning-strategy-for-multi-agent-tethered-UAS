@@ -3,7 +3,10 @@
 #include <rclcpp/rclcpp.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit_visual_tools/moveit_visual_tools.h>
+#include <rviz_visual_tools/rviz_visual_tools.hpp>
+
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 int main(int argc, char * argv[])
 {
@@ -29,128 +32,273 @@ int main(int argc, char * argv[])
   // Next step goes here
   using moveit::planning_interface::MoveGroupInterface;
   auto move_group_interface = MoveGroupInterface(node, "Group1");
+  move_group_interface.allowLooking(true);
+  static const std::string PLANNING_GROUP = "Group1";
+  namespace rvt = rviz_visual_tools;
+  std::string planner_id = "RRTConnect";  // Example: RRTConnect
+  // move_group_interface.setPlannerId(planner_id);
+  moveit_visual_tools::MoveItVisualTools visual_tools(node, "base_link","display_contacts",
+                                                      move_group_interface.getRobotModel());
+  move_group_interface.setPlannerId(planner_id);
+  // move_group_interface.setEndEffector("Drone4");
+    // Print the planning pipeline and planner ID being used
+  std::string planning_pipeline = move_group_interface.getPlannerId();
+  RCLCPP_INFO(logger, "Using : %s", planning_pipeline.c_str());
+  move_group_interface.setPlanningTime(30);
+  // move_group_interface.setGoalOrientationTolerance(1.5707)  ;
 
-// ------------------------------------------------------------------------------------------------
+  // RCLCPP_INFO(logger, "getDefaultPlannerId : %s", 	move_group_interface.getDefaultPlannerId().c_str());
+  RCLCPP_INFO(logger, "getVariableCount : %d", 	move_group_interface.getVariableCount());
+  // move_group_interface.setWorkspace()
+  // RCLCPP_INFO(logger, "Using planner: %s", planner_id.c_str());
+
+  // moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+  // auto objects = planning_scene_interface.getObjects();
+  // RCLCPP_INFO(logger, "The planning scene contains %zu objects.", objects.size());
+
+  // RCLCPP_INFO(logger, "Using planner: %s", planning_scene_interface.getObjects());
+
+  // ------------------------------------------------------------------------------------------------
+
+  // ------------------------------------------------------------------------------------------------
+
+
+    // move_group_interface.setPoseTarget(target_pose);
+
+    // Add the collision object to the scene
+    moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// -----------------------------------------------------------------------------------------------
+
   // Set a target Pose
-  auto const target_pose = [] {
-    geometry_msgs::msg::Pose msg;
+  moveit::core::RobotState start_state(*move_group_interface.getCurrentState());
+  const moveit::core::JointModelGroup* joint_model_group = start_state.getJointModelGroup("Group1");
+
+    // Get the names of the joints in the group
+  // const std::vector<std::string>& joint_names = joint_model_group->getVariableNames();
+
+    // Get the joint positions
+  std::vector<double> joint_values;
+  start_state.copyJointGroupPositions(joint_model_group, joint_values);
     
-    msg.position.x = 1;
-    msg.position.y = 3;  // <---- This value was changed
-    msg.position.z = 3;
-    return msg;
-  }();
-  move_group_interface.setPoseTarget(target_pose);
+    // Print the joint names and their values
+  // for (size_t i = 0; i < joint_names.size(); ++i)
+  //   {
+  //       RCLCPP_INFO(node->get_logger(), "Joint %s: %f", joint_names[i].c_str(), joint_values[i]);
+  //   }
+
+  const Eigen::Isometry3d& end_effector_state = start_state.getGlobalLinkTransform("Drone4");
+  // RCLCPP_INFO_STREAM(node->get_logger(), "Translation: \n" << end_effector_state.translation() << "\n");
+  // RCLCPP_INFO_STREAM(node->get_logger(), "Rotation: \n" << end_effector_state.rotation() << "\n");
+  double timeout = 1;
+  // bool found_ik = robot_state->setFromIK(joint_model_group, new_transform, timeout);
+  // if (found_ik)
+  // {
+  //   robot_state->copyJointGroupPositions(joint_model_group, joint_values);
+  //   for (std::size_t i = 0; i < joint_names.size(); ++i)
+  //   {
+  //     RCLCPP_INFO(LOGGER, "Joint %s: %f", joint_names[i].c_str(), joint_values[i]);
+  //   }
+  
+  // }
+  geometry_msgs::msg::Pose ee_pose;
+  ee_pose.orientation.w = 1.0;
+  ee_pose.position.x = end_effector_state.translation().x();
+  ee_pose.position.y = end_effector_state.translation().y();
+  ee_pose.position.z = end_effector_state.translation().z();
 
 
+  std::vector<geometry_msgs::msg::Pose> waypoints_vec;
+
+  geometry_msgs::msg::Pose waypoints;
+  // waypoints.orientation.w = 1.00000;
+  // waypoints.orientation.x = 1e-6;
+  // waypoints.orientation.y = 1e-6;
+  // waypoints.orientation.z = 1e-6;
+  waypoints.position.x = end_effector_state.translation().x();
+  waypoints.position.y = end_effector_state.translation().y()+1.5;
+  waypoints.position.z = end_effector_state.translation().z()+0.3;
+  // waypoints_vec.push_back(waypoints);
+
+  // waypoints.orientation.w = 1.0;
+  // waypoints.position.z += 0.25;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // waypoints.position.y += 0.5;
+  // waypoints_vec.push_back(waypoints);
+  // for (std::size_t i = 0; i < waypoints_vec.size(); ++i)
+  // {
+  //   visual_tools.publishAxisLabeled(waypoints_vec[i], "pt" + std::to_string(i), rvt::XXLARGE);
+  //   RCLCPP_INFO_STREAM(node->get_logger(), "Point: \n" << waypoints_vec[i].position.y << "\n");
+  // }
+  
+  moveit::core::RobotState new_state(*move_group_interface.getCurrentState());
+  std::vector<std::vector<double>> ik_solutions;
+
+  while(ik_solutions.size() < 10 && rclcpp::ok())
+  {
+    bool found_ik = new_state.setFromIK(joint_model_group, waypoints, timeout);
+    if (found_ik)
+    {
+      RCLCPP_INFO(node->get_logger(), "Found ");
+
+      new_state.copyJointGroupPositions(joint_model_group, joint_values);
+      const std::vector<std::string>& joint_names = joint_model_group->getVariableNames();
+      ik_solutions.push_back(joint_values);
+      move_group_interface.setJointValueTarget(joint_values);
+      moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+      bool success = (move_group_interface.plan(my_plan) == moveit::core::MoveItErrorCode::SUCCESS);
     
+    }
+    else
+    {
+      
+      RCLCPP_INFO(node->get_logger(), "IK for waypoint not found. Retrying....");
 
-// Create collision object for the robot to avoid
-auto const collision_object = [frame_id =
-                                 move_group_interface.getPlanningFrame()] {
-  moveit_msgs::msg::CollisionObject collision_object;
-  collision_object.header.frame_id = frame_id;
-  collision_object.id = "box1";
-  shape_msgs::msg::SolidPrimitive primitive;
-
-  // Define the size of the box in meters
-  primitive.type = primitive.BOX;
-  primitive.dimensions.resize(3);
-  primitive.dimensions[primitive.BOX_X] = 4;
-  primitive.dimensions[primitive.BOX_Y] = 0.1;
-  primitive.dimensions[primitive.BOX_Z] = 2;
-
-  // Define the pose of the box (relative to the frame_id)
-  geometry_msgs::msg::Pose box_pose;
-  box_pose.orientation.w = 1.0;
-  box_pose.position.x = -3;
-  box_pose.position.y = 1;
-  box_pose.position.z = 1;
-
-  collision_object.primitives.push_back(primitive);
-  collision_object.primitive_poses.push_back(box_pose);
-  collision_object.operation = collision_object.ADD;
-
-  return collision_object;
-}();
-
-auto const collision_object1 = [frame_id =
-                                 move_group_interface.getPlanningFrame()] {
-  moveit_msgs::msg::CollisionObject collision_object;
-  collision_object.header.frame_id = frame_id;
-  collision_object.id = "box2";
-  shape_msgs::msg::SolidPrimitive primitive;
-
-  // Define the size of the box in meters
-  primitive.type = primitive.BOX;
-  primitive.dimensions.resize(3);
-  primitive.dimensions[primitive.BOX_X] = 4;
-  primitive.dimensions[primitive.BOX_Y] = 0.1;
-  primitive.dimensions[primitive.BOX_Z] = 2;
-
-  // Define the pose of the box (relative to the frame_id)
-  geometry_msgs::msg::Pose box_pose;
-  box_pose.orientation.w = 1.0;
-  box_pose.position.x = 3;
-  box_pose.position.y = 1;
-  box_pose.position.z = 1;
-
-  collision_object.primitives.push_back(primitive);
-  collision_object.primitive_poses.push_back(box_pose);
-  collision_object.operation = collision_object.ADD;
-
-  return collision_object;
-}();
-// auto const collision_object1 = [frame_id =
-//                                  move_group_interface.getPlanningFrame()] {
-//   moveit_msgs::msg::CollisionObject collision_object;
-//   collision_object.header.frame_id = frame_id;
-//   collision_object.id = "floor";
-//   shape_msgs::msg::SolidPrimitive primitive;
-
-//   // Define the size of the box in meters
-//   primitive.type = primitive.BOX;
-//   primitive.dimensions.resize(3);
-//   primitive.dimensions[primitive.BOX_X] = 10;
-//   primitive.dimensions[primitive.BOX_Y] = 10;
-//   primitive.dimensions[primitive.BOX_Z] = 0;
-
-//   // Define the pose of the box (relative to the frame_id)
-//   geometry_msgs::msg::Pose box_pose;
-//   box_pose.orientation.w = 1.0;
-//   box_pose.position.x = 0;
-//   box_pose.position.y = 0;
-//   box_pose.position.z = -0.1;
-
-//   collision_object.primitives.push_back(primitive);
-//   collision_object.primitive_poses.push_back(box_pose);
-//   collision_object.operation = collision_object.ADD;
-
-//   return collision_object;
-// }();
-  // Add the collision object to the scene
-  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  planning_scene_interface.applyCollisionObject(collision_object);
-  planning_scene_interface.applyCollisionObject(collision_object1);
+    }
 
 
 
 
 
-
-  auto const [success, plan] = [&move_group_interface] {
-    moveit::planning_interface::MoveGroupInterface::Plan msg;
-    auto const ok = static_cast<bool>(move_group_interface.plan(msg));
-    return std::make_pair(ok, msg);
-  }();
-
-  // Execute the plan
-  if (success) {
-    
-    move_group_interface.execute(plan);
-  } else {
-    RCLCPP_ERROR(logger, "Planing failed!");
   }
+
+  for (std::size_t i = 0; i < ik_solutions.size(); ++i)
+    {    
+          if (i > 0) {
+        // Compare current solution with the previous one
+        if (ik_solutions[i] != ik_solutions[i - 1]) 
+        {
+            RCLCPP_INFO(node->get_logger(), "diff solution"); 
+        }
+    }
+      visual_tools.publishRobotState(ik_solutions[i],joint_model_group,rviz_visual_tools::BLUE);
+      visual_tools.trigger();
+      RCLCPP_INFO(node->get_logger(), "Publishing IK solution");
+
+      rclcpp::sleep_for(std::chrono::seconds(2));
+    }
+
+
+  // for (std::size_t i = 0; i < waypoints_vec.size(); ++i)
+  // {
+
+  //   // move_group_interface.setPoseTarget(waypoints_vec[i]);
+
+
+    // moveit::core::RobotState new_state(*move_group_interface.getCurrentState());
+  //   const moveit::core::JointModelGroup* joint_model_group = new_state.getJointModelGroup("Group1");
+
+  //   double timeout = 0.5;
+  //   bool found_ik = false;
+  //   new_state.printStatePositions();
+
+  //   while(found_ik == false && rclcpp::ok())
+  //   {
+  //   found_ik = new_state.setFromIK(joint_model_group, waypoints_vec[i], timeout);
+  //   RCLCPP_ERROR(node->get_logger(), "IK for waypoint not found. Retrying....");
+
+  //   }
+  //   if (found_ik)
+  //     {
+  //         RCLCPP_INFO(node->get_logger(), "IK for waypoint found");
+  //         new_state.copyJointGroupPositions(joint_model_group, joint_values);
+
+  //         move_group_interface.setJointValueTarget(joint_values);
+
+  //         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+
+  //         // bool success = (move_group_interface.plan(my_plan) == moveit::core::MoveItErrorCode::SUCCESS);
+  
+  
+  //       //   if (success)
+  //       // {
+  //       //   RCLCPP_WARN(node->get_logger(), "Success ");
+  //       //   // move_group_interface.move();
+  //       //   visual_tools.deleteAllMarkers();
+  //       //   // visual_tools.publishText(text_pose, "Joint_Space_Goal", rvt::WHITE, rvt::XXLARGE);
+  //       //   visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  //       //   visual_tools.trigger();
+
+  //       // }
+
+  //     }
+
+
+  // {
+    
+  //   for (std::size_t i = 0; i < joint_names.size(); ++i)
+  //   {
+  //     RCLCPP_INFO(node->get_logger(), "Joint %s: %f", joint_names[i].c_str(), joint_values[i]);
+  //   }
+  // }
+  // else
+  // {
+  //   RCLCPP_INFO(node->get_logger(), "Did not find IK solution");
+  // }
+
+
+
+  
+
+//  }
+    // auto const [success, plan] = [&move_group_interface] {
+    //   moveit::planning_interface::MoveGroupInterface::Plan msg;
+    //   auto const ok = static_cast<bool>(move_group_interface.plan(msg));
+    //   return std::make_pair(ok, msg);
+    // }();
+
+    // // Execute the plan
+    // if (success) {
+    
+    //   RCLCPP_ERROR(logger, "Planing Succeded!");
+
+    //   move_group_interface.move();
+    // } else {
+    //   RCLCPP_ERROR(logger, "Planing failed!");
+    // }
+  
+
+
+
       // Shutdown ROS 
     rclcpp::shutdown();  // <--- This will cause the spin function in the thread to return
     spinner.join();  // <--- Join the thread before exiting

@@ -3,6 +3,7 @@ moveit_setup_assistant_config:
     package: isaac_sim_demo
     relative_path: urdf/4_drones.urdf
   srdf:
+    package: isaac_sim_demo
     relative_path: config/isaac_twin.srdf
   package_settings:
     author_name: Nikolaos

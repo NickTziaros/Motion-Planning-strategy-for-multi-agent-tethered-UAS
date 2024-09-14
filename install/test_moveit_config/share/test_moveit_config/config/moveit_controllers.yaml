@@ -4,9 +4,9 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 
 moveit_simple_controller_manager:
   controller_names:
-    - group_test_controller
+    - Chain_Group_controller
 
-  group_test_controller:
+  Chain_Group_controller:
     type: FollowJointTrajectory
     action_ns: follow_joint_trajectory
     default: true
@@ -14,8 +14,14 @@ moveit_simple_controller_manager:
       - spherical_1_x
       - spherical_1_y
       - spherical_1_z
-      - prismatic_joint_1
       - spherical_2_x
       - spherical_2_y
       - spherical_2_z
-      - prismatic_joint_2
+      - spherical_3_x
+      - spherical_3_y
+      - spherical_3_z
+      - spherical_4_x
+      - spherical_4_y
+      - spherical_4_z
+    action_ns: follow_joint_trajectory
+    default: true

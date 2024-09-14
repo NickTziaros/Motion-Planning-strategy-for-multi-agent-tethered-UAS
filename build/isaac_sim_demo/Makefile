@@ -276,17 +276,43 @@ tf_to_pos_node/fast:
 .PHONY : tf_to_pos_node/fast
 
 #=============================================================================
-# Target rules for targets named moveit_test
+# Target rules for targets named moveit_test_node
 
 # Build rule for target.
-moveit_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 moveit_test
-.PHONY : moveit_test
+moveit_test_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 moveit_test_node
+.PHONY : moveit_test_node
 
 # fast build rule for target.
-moveit_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test.dir/build.make CMakeFiles/moveit_test.dir/build
-.PHONY : moveit_test/fast
+moveit_test_node/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test_node.dir/build.make CMakeFiles/moveit_test_node.dir/build
+.PHONY : moveit_test_node/fast
+
+#=============================================================================
+# Target rules for targets named cpp_demo
+
+# Build rule for target.
+cpp_demo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cpp_demo
+.PHONY : cpp_demo
+
+# fast build rule for target.
+cpp_demo/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/build
+.PHONY : cpp_demo/fast
+
+#=============================================================================
+# Target rules for targets named spawn_scene
+
+# Build rule for target.
+spawn_scene: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 spawn_scene
+.PHONY : spawn_scene
+
+# fast build rule for target.
+spawn_scene/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/spawn_scene.dir/build.make CMakeFiles/spawn_scene.dir/build
+.PHONY : spawn_scene/fast
 
 #=============================================================================
 # Target rules for targets named ompl_lifecycle
@@ -349,6 +375,30 @@ src/StateSubscriber_node.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/StateSubscriber_node.dir/build.make CMakeFiles/StateSubscriber_node.dir/src/StateSubscriber_node.cpp.s
 .PHONY : src/StateSubscriber_node.cpp.s
 
+src/cpp_int.o: src/cpp_int.cpp.o
+.PHONY : src/cpp_int.o
+
+# target to build an object file
+src/cpp_int.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.o
+.PHONY : src/cpp_int.cpp.o
+
+src/cpp_int.i: src/cpp_int.cpp.i
+.PHONY : src/cpp_int.i
+
+# target to preprocess a source file
+src/cpp_int.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.i
+.PHONY : src/cpp_int.cpp.i
+
+src/cpp_int.s: src/cpp_int.cpp.s
+.PHONY : src/cpp_int.s
+
+# target to generate assembly for a file
+src/cpp_int.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.s
+.PHONY : src/cpp_int.cpp.s
+
 src/markers.o: src/markers.cpp.o
 .PHONY : src/markers.o
 
@@ -378,7 +428,7 @@ src/moveit_demo.o: src/moveit_demo.cpp.o
 
 # target to build an object file
 src/moveit_demo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test.dir/build.make CMakeFiles/moveit_test.dir/src/moveit_demo.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test_node.dir/build.make CMakeFiles/moveit_test_node.dir/src/moveit_demo.cpp.o
 .PHONY : src/moveit_demo.cpp.o
 
 src/moveit_demo.i: src/moveit_demo.cpp.i
@@ -386,7 +436,7 @@ src/moveit_demo.i: src/moveit_demo.cpp.i
 
 # target to preprocess a source file
 src/moveit_demo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test.dir/build.make CMakeFiles/moveit_test.dir/src/moveit_demo.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test_node.dir/build.make CMakeFiles/moveit_test_node.dir/src/moveit_demo.cpp.i
 .PHONY : src/moveit_demo.cpp.i
 
 src/moveit_demo.s: src/moveit_demo.cpp.s
@@ -394,7 +444,7 @@ src/moveit_demo.s: src/moveit_demo.cpp.s
 
 # target to generate assembly for a file
 src/moveit_demo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test.dir/build.make CMakeFiles/moveit_test.dir/src/moveit_demo.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/moveit_test_node.dir/build.make CMakeFiles/moveit_test_node.dir/src/moveit_demo.cpp.s
 .PHONY : src/moveit_demo.cpp.s
 
 src/ompl_controller_node.o: src/ompl_controller_node.cpp.o
@@ -444,6 +494,30 @@ src/ompl_lifecycle.s: src/ompl_lifecycle.cpp.s
 src/ompl_lifecycle.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ompl_lifecycle.dir/build.make CMakeFiles/ompl_lifecycle.dir/src/ompl_lifecycle.cpp.s
 .PHONY : src/ompl_lifecycle.cpp.s
+
+src/spawn_scene.o: src/spawn_scene.cpp.o
+.PHONY : src/spawn_scene.o
+
+# target to build an object file
+src/spawn_scene.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/spawn_scene.dir/build.make CMakeFiles/spawn_scene.dir/src/spawn_scene.cpp.o
+.PHONY : src/spawn_scene.cpp.o
+
+src/spawn_scene.i: src/spawn_scene.cpp.i
+.PHONY : src/spawn_scene.i
+
+# target to preprocess a source file
+src/spawn_scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/spawn_scene.dir/build.make CMakeFiles/spawn_scene.dir/src/spawn_scene.cpp.i
+.PHONY : src/spawn_scene.cpp.i
+
+src/spawn_scene.s: src/spawn_scene.cpp.s
+.PHONY : src/spawn_scene.s
+
+# target to generate assembly for a file
+src/spawn_scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/spawn_scene.dir/build.make CMakeFiles/spawn_scene.dir/src/spawn_scene.cpp.s
+.PHONY : src/spawn_scene.cpp.s
 
 src/tf_to_pos.o: src/tf_to_pos.cpp.o
 .PHONY : src/tf_to_pos.o
@@ -509,11 +583,13 @@ help:
 	@echo "... isaac_sim_demo_uninstall"
 	@echo "... uninstall"
 	@echo "... StateSubscriber_node"
+	@echo "... cpp_demo"
 	@echo "... isaac_sim_demo_library"
 	@echo "... markers_node"
-	@echo "... moveit_test"
+	@echo "... moveit_test_node"
 	@echo "... ompl_controller_node"
 	@echo "... ompl_lifecycle"
+	@echo "... spawn_scene"
 	@echo "... tf_to_pos_node"
 	@echo "... visualization_node"
 	@echo "... src/RRT_controller.o"
@@ -522,6 +598,9 @@ help:
 	@echo "... src/StateSubscriber_node.o"
 	@echo "... src/StateSubscriber_node.i"
 	@echo "... src/StateSubscriber_node.s"
+	@echo "... src/cpp_int.o"
+	@echo "... src/cpp_int.i"
+	@echo "... src/cpp_int.s"
 	@echo "... src/markers.o"
 	@echo "... src/markers.i"
 	@echo "... src/markers.s"
@@ -534,6 +613,9 @@ help:
 	@echo "... src/ompl_lifecycle.o"
 	@echo "... src/ompl_lifecycle.i"
 	@echo "... src/ompl_lifecycle.s"
+	@echo "... src/spawn_scene.o"
+	@echo "... src/spawn_scene.i"
+	@echo "... src/spawn_scene.s"
 	@echo "... src/tf_to_pos.o"
 	@echo "... src/tf_to_pos.i"
 	@echo "... src/tf_to_pos.s"

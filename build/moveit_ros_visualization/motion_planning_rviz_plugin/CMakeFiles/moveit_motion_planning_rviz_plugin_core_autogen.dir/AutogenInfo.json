@@ -50,7 +50,6 @@
 	"MOC_COMPILATION_FILE" : "/home/ubuntu/ros2_ws/build/moveit_ros_visualization/motion_planning_rviz_plugin/moveit_motion_planning_rviz_plugin_core_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
-		"BACKWARD_HAS_DW=1",
 		"BOOST_ALL_NO_LIB",
 		"BOOST_ATOMIC_DYN_LINK",
 		"BOOST_CHRONO_DYN_LINK",

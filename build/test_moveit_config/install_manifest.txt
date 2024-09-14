@@ -31,4 +31,5 @@
 /home/ubuntu/ros2_ws/install/test_moveit_config/share/test_moveit_config/config/kinematics.yaml
 /home/ubuntu/ros2_ws/install/test_moveit_config/share/test_moveit_config/config/moveit.rviz
 /home/ubuntu/ros2_ws/install/test_moveit_config/share/test_moveit_config/config/joint_limits.yaml
+/home/ubuntu/ros2_ws/install/test_moveit_config/share/test_moveit_config/config/isaac_twin.urdf
 /home/ubuntu/ros2_ws/install/test_moveit_config/share/test_moveit_config/.setup_assistant

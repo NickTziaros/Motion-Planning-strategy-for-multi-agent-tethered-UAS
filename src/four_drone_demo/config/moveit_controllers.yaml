@@ -27,3 +27,5 @@ moveit_simple_controller_manager:
       - spherical_4_y
       - spherical_4_z
       - prismatic_joint_4
+    action_ns: follow_joint_trajectory
+    default: true

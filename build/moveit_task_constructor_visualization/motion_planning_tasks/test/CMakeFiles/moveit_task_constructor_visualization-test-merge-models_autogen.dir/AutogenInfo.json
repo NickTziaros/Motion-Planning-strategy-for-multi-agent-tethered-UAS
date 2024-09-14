@@ -68,7 +68,6 @@
 	"MOC_COMPILATION_FILE" : "/home/ubuntu/ros2_ws/build/moveit_task_constructor_visualization/motion_planning_tasks/test/moveit_task_constructor_visualization-test-merge-models_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
-		"BACKWARD_HAS_DW=1",
 		"BOOST_MATH_DISABLE_FLOAT128",
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",

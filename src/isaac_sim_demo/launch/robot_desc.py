@@ -14,7 +14,7 @@ def generate_launch_description():
 
     
 
-    urdf_file_name = '4_drones.xacro'
+    urdf_file_name = 'chain_twin.xacro'
     urdf = os.path.join(my_package_dir,
         'urdf',
         urdf_file_name)

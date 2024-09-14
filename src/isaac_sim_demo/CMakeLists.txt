@@ -25,6 +25,8 @@ find_package(moveit_visual_tools REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(robot_state_publisher REQUIRED)
+find_package(four_drone_demo REQUIRED)
+
 # find_package(joint_state_publisher REQUIRED)
 # find_package(joint_state_publisher_gui REQUIRED)
 
@@ -67,6 +69,7 @@ ament_target_dependencies(
   ${PROJECT_NAME}_library
   rclcpp
   ompl
+  four_drone_demo
   nav_msgs
   lifecycle_msgs
   geometry_msgs
@@ -106,8 +109,14 @@ ament_target_dependencies(visualization_node  rclcpp geometry_msgs visualization
 add_executable(tf_to_pos_node src/tf_to_pos.cpp)
 ament_target_dependencies(tf_to_pos_node  rclcpp geometry_msgs tf2_ros nav_msgs tf2_geometry_msgs custom_interfaces) 
 
-add_executable(moveit_test src/moveit_demo.cpp)
-ament_target_dependencies(moveit_test  moveit_ros_planning_interface  moveit_visual_tools)
+add_executable(moveit_test_node src/moveit_demo.cpp)
+ament_target_dependencies(moveit_test_node  moveit_ros_planning_interface  moveit_visual_tools four_drone_demo)
+
+add_executable(cpp_demo src/cpp_int.cpp)
+ament_target_dependencies(cpp_demo  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs)
+
+add_executable(spawn_scene src/spawn_scene.cpp)
+ament_target_dependencies(spawn_scene  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs)
 
 add_executable(ompl_lifecycle src/ompl_lifecycle.cpp)
 ament_target_dependencies(ompl_lifecycle  rclcpp std_msgs std_srvs lifecycle_msgs nav_msgs visualization_msgs rclcpp_lifecycle  ompl custom_interfaces ) 
@@ -124,6 +133,7 @@ install(DIRECTORY
   urdf
   DESTINATION share/${PROJECT_NAME}/
 )
+install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
   tf_to_pos_node
@@ -131,8 +141,10 @@ install(TARGETS
   markers_node
   ompl_controller_node
   visualization_node
-  moveit_test
+  moveit_test_node
   ompl_lifecycle
+  cpp_demo
+  spawn_scene
   DESTINATION lib/${PROJECT_NAME}
 )
 

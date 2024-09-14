@@ -7,85 +7,62 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.1 0.1 0"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
-    <collision>
-      <geometry>
-        <box size="0.1 0.1 0"/>
-      </geometry>
-    </collision>
   </link>
   <link name="spherical_1_x">
     <inertial>
       <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
   <link name="spherical_1_y">
     <inertial>
       <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
   <link name="spherical_1_z">
     <inertial>
       <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
-  <joint name="spherical_1_x" type="revolute">
+  <joint name="spherical_1_x" type="continuous">
     <parent link="base_link"/>
     <child link="spherical_1_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
-  <joint name="spherical_1_y" type="revolute">
+  <joint name="spherical_1_y" type="continuous">
     <parent link="spherical_1_x"/>
     <child link="spherical_1_y"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 1.570" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_1_z" type="continuous">
     <parent link="spherical_1_y"/>
@@ -96,26 +73,26 @@
   <joint name="prismatic_joint_1" type="prismatic">
     <parent link="spherical_1_z"/>
     <child link="Drone1"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="3" velocity="1.0"/>
+    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
   </joint>
   <link name="Drone1">
     <inertial>
       <mass value="0.1"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
+      <inertia ixx="0.0008333333333333334" ixy="0" ixz="0" iyy="0.0008333333333333334" iyz="0" izz="0.0015"/>
     </inertial>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -125,16 +102,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -144,16 +115,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -163,32 +128,26 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
-  <joint name="spherical_2_x" type="revolute">
+  <joint name="spherical_2_x" type="continuous">
     <parent link="Drone1"/>
     <child link="spherical_2_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
-  <joint name="spherical_2_y" type="revolute">
+  <joint name="spherical_2_y" type="continuous">
     <parent link="spherical_2_x"/>
     <child link="spherical_2_y"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_2_z" type="continuous">
     <parent link="spherical_2_y"/>
@@ -201,24 +160,24 @@
     <child link="Drone2"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="3" velocity="1.0"/>
+    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
   </joint>
   <link name="Drone2">
     <inertial>
       <mass value="0.1"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
+      <inertia ixx="0.0008333333333333334" ixy="0" ixz="0" iyy="0.0008333333333333334" iyz="0" izz="0.0015"/>
     </inertial>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -228,16 +187,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -247,16 +200,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -266,32 +213,26 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
-  <joint name="spherical_3_x" type="revolute">
+  <joint name="spherical_3_x" type="continuous">
     <parent link="Drone2"/>
     <child link="spherical_3_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
-  <joint name="spherical_3_y" type="revolute">
+  <joint name="spherical_3_y" type="continuous">
     <parent link="spherical_3_x"/>
     <child link="spherical_3_y"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_3_z" type="continuous">
     <parent link="spherical_3_y"/>
@@ -304,24 +245,24 @@
     <child link="Drone3"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="3" velocity="1.0"/>
+    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
   </joint>
   <link name="Drone3">
     <inertial>
       <mass value="0.1"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
+      <inertia ixx="0.0008333333333333334" ixy="0" ixz="0" iyy="0.0008333333333333334" iyz="0" izz="0.0015"/>
     </inertial>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -331,16 +272,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -350,16 +285,10 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
@@ -369,32 +298,26 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
     </inertial>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.1 0.1 0.1"/>
-      </geometry>
-    </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.01 0.01 0"/>
       </geometry>
     </visual>
   </link>
-  <joint name="spherical_4_x" type="revolute">
+  <joint name="spherical_4_x" type="continuous">
     <parent link="Drone3"/>
     <child link="spherical_4_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
-  <joint name="spherical_4_y" type="revolute">
+  <joint name="spherical_4_y" type="continuous">
     <parent link="spherical_4_x"/>
     <child link="spherical_4_y"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_4_z" type="continuous">
     <parent link="spherical_4_y"/>
@@ -407,7 +330,7 @@
     <child link="Drone4"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="3" velocity="1.0"/>
+    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
   </joint>
   <link name="Drone4">
     <inertial>
@@ -418,13 +341,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="0.25 0.25 0.25"/>
       </geometry>
     </visual>
   </link>

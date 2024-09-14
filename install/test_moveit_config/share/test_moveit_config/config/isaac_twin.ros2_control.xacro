@@ -10,6 +10,7 @@
             </hardware>
             <joint name="spherical_1_x">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_1_x']}</param>
                 </state_interface>
@@ -17,6 +18,7 @@
             </joint>
             <joint name="spherical_1_y">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_1_y']}</param>
                 </state_interface>
@@ -24,20 +26,15 @@
             </joint>
             <joint name="spherical_1_z">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_1_z']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="prismatic_joint_1">
-                <command_interface name="position"/>
-                <state_interface name="position">
-                  <param name="initial_value">${initial_positions['prismatic_joint_1']}</param>
-                </state_interface>
-                <state_interface name="velocity"/>
-            </joint>
             <joint name="spherical_2_x">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_2_x']}</param>
                 </state_interface>
@@ -45,6 +42,7 @@
             </joint>
             <joint name="spherical_2_y">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_2_y']}</param>
                 </state_interface>
@@ -52,15 +50,57 @@
             </joint>
             <joint name="spherical_2_z">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['spherical_2_z']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="prismatic_joint_2">
+            <joint name="spherical_3_x">
                 <command_interface name="position"/>
+                <command_interface name="velocity"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['prismatic_joint_2']}</param>
+                  <param name="initial_value">${initial_positions['spherical_3_x']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="spherical_3_y">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['spherical_3_y']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="spherical_3_z">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['spherical_3_z']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="spherical_4_x">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['spherical_4_x']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="spherical_4_y">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['spherical_4_y']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="spherical_4_z">
+                <command_interface name="position"/>
+                <command_interface name="velocity"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['spherical_4_z']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
