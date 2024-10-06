@@ -43,16 +43,16 @@ def generate_launch_description():
 
 
     moveit_config = (
-        MoveItConfigsBuilder("isaac_twin", package_name="four_drone_demo")
+        MoveItConfigsBuilder("isaac_twin", package_name="prismatic_moveit_config")
         .robot_description(file_path="config/isaac_twin.urdf.xacro")
         .robot_description_semantic(file_path="config/isaac_twin.srdf")
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
-        .planning_pipelines(pipelines=["ompl", "stomp"])
+        .planning_pipelines(pipelines=["ompl"])
         .to_moveit_configs()
     )   
-    package_path = get_package_share_directory('four_drone_demo')
+    package_path = get_package_share_directory('prismatic_moveit_config')
 
 
     rviz_parameters = [
@@ -99,7 +99,7 @@ def generate_launch_description():
         # 'planning_plugin' : 'ompl_interface/OMPLPlanner',
 
         # change this to select planner
-        'default_planning_pipeline': 'stomp',
+        'default_planning_pipeline': 'ompl',
         'enforce_joint_model_state_space': 'True',
         'request_adapters' : "default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints",
         'start_state_max_bounds_error' : 0.1 }
@@ -137,7 +137,7 @@ def generate_launch_description():
     )
 
     ros2_controllers_path = os.path.join(
-        get_package_share_directory("four_drone_demo"),
+        get_package_share_directory("prismatic_moveit_config"),
         "config",
         "ros2_controllers.yaml",
     )
@@ -195,13 +195,13 @@ def generate_launch_description():
 
 
     global_planner_param = load_yaml(
-        "four_drone_demo", "config/global_planner.yaml"
+        "prismatic_moveit_config", "config/global_planner.yaml"
     )
     local_planner_param = load_yaml(
-        "four_drone_demo", "config/local_planner.yaml"
+        "prismatic_moveit_config", "config/local_planner.yaml"
     )
     hybrid_planning_manager_param = load_yaml(
-        "four_drone_demo", "config/hybrid_planning_manager.yaml"
+        "prismatic_moveit_config", "config/hybrid_planning_manager.yaml"
     )
 
 # A namespace can be added if multiple hybrid planners are launched
@@ -254,27 +254,6 @@ def generate_launch_description():
         ],
         output="screen",
     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

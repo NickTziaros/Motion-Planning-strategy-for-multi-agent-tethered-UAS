@@ -22,8 +22,8 @@ def generate_launch_description():
      }
     cpp_demo =  Node(
                 package="isaac_sim_demo",
-                executable="cpp_demo",
-                name="cpp_demo",
+                executable="cartesian",
+                name="cartesian",
                 output="screen",
                 parameters=[moveit_config.to_dict(),
                 ompl_planning_pipeline_config],
