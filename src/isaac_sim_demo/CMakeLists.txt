@@ -127,6 +127,8 @@ ament_target_dependencies(ompl_lifecycle  rclcpp std_msgs std_srvs lifecycle_msg
 target_link_libraries(ompl_lifecycle ${PROJECT_NAME}_library ${OMPL_LIBRARIES})
 
 
+add_executable(drone_marker_publisher src/drone_marker_publisher.cpp)
+ament_target_dependencies(drone_marker_publisher visualization_msgs rclcpp tf2_geometry_msgs)
 
 
 # when the ompl package is isntalled it provides the variable ${OMPL_LIBRARIES}
@@ -150,6 +152,7 @@ install(TARGETS
   joint_space
   spawn_scene
   cartesian
+  drone_marker_publisher
   DESTINATION lib/${PROJECT_NAME}
 )
 

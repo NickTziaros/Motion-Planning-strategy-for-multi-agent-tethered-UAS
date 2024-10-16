@@ -5,13 +5,13 @@ from moveit_configs_utils import MoveItConfigsBuilder
 def generate_launch_description():
 
     moveit_config = (
-        MoveItConfigsBuilder("isaac_twin", package_name="four_drone_demo")
+        MoveItConfigsBuilder("isaac_twin", package_name="prismatic_moveit_config")
         .robot_description(file_path="config/isaac_twin.urdf.xacro")
         .robot_description_semantic(file_path="config/isaac_twin.srdf")
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
-        .planning_pipelines(pipelines=["ompl"])
+        .planning_pipelines(pipelines=["ompl","stomp"])
         .to_moveit_configs()
         )
     ompl_planning_pipeline_config = { 

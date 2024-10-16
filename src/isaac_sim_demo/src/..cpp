@@ -28,6 +28,8 @@ static const rclcpp::Logger LOGGER = rclcpp::get_logger("motion_planning_pipelin
 #include <moveit_msgs/msg/visibility_constraint.hpp>
 #include "visualization_msgs/msg/marker_array.hpp"
 #include "visualization_msgs/msg/marker.hpp"
+#include <fcl/fcl.h>
+#include <btBulletDynamicsCommon.h>
 
 void compute_path(const rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr& publisher_,std::vector<geometry_msgs::msg::PoseStamped>& waypoints){
 
@@ -40,11 +42,9 @@ void compute_path(const rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr& publi
   publisher_->publish(path);
 }
 
-struct CylinderInfo {
-    shapes::ShapeConstPtr shape;
-    Eigen::Isometry3d transform;
-    double height;
-};
+
+
+
 
 nav_msgs::msg::Path interpolate_path(const rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr& publisher_,std::vector<geometry_msgs::msg::PoseStamped>& waypoints){
   std::vector<geometry_msgs::msg::PoseStamped> interpolated_points;
@@ -83,51 +83,86 @@ nav_msgs::msg::Path interpolate_path(const rclcpp::Publisher<nav_msgs::msg::Path
 }
 
 
-CylinderInfo createCylinderBetweenLinks(const moveit::core::RobotState& robot_state, const std::string& link1, const std::string& link2, double radius)
+bool checkRayBoxIntersection(btDynamicsWorld* dynamicsWorld, const btVector3& P1, const btVector3& P2, const std::string& Start ,const std::string& End )
 {
-    // Get transforms for the two links
-    Eigen::Isometry3d transform1 = robot_state.getGlobalLinkTransform(link1);
-    Eigen::Isometry3d transform2 = robot_state.getGlobalLinkTransform(link2);
-    
-    // Calculate the height of the cylinder as the distance between the two links
-    Eigen::Vector3d position1 = transform1.translation();
-    Eigen::Vector3d position2 = transform2.translation();
-    
-    double height = (position2 - position1).norm();  // Distance between the two links
+    btCollisionWorld::ClosestRayResultCallback rayCallback(P1, P2);
+    dynamicsWorld->rayTest(P1, P2, rayCallback);
 
-    // Create the cylinder shape
-    auto cylinder = std::make_shared<shapes::Cylinder>(radius, height); // Create a shared pointer to the cylinder    
-    // Calculate the center position of the cylinder
-    Eigen::Vector3d center = (position1 + position2) / 2.0;
+    if (rayCallback.hasHit()) {
+        // std::cout << "No line of sight between " + Start + " and " + End + "!" << std::endl;
+        return true;
+    } else {
+        // std::cout << "Line of sight between " + Start + " and " + End + "!" << std::endl;
+        return false;
+    }
+}
+bool checkRayBoxIntersection(const moveit::core::RobotState& robot_state,btDynamicsWorld* dynamicsWorld)
+{
+    Eigen::Isometry3d drone1_transform = robot_state.getFrameTransform("Drone1");
+    Eigen::Isometry3d drone2_transform = robot_state.getFrameTransform("Drone2");
+    Eigen::Isometry3d drone3_transform = robot_state.getFrameTransform("Drone3");
+    Eigen::Isometry3d drone4_transform = robot_state.getFrameTransform("Drone4");
+    Eigen::Isometry3d origin = Eigen::Isometry3d::Identity();     
 
-    // Calculate the direction vector from link1 to link2
-    Eigen::Vector3d direction = (position2 - position1).normalized();
+    btVector3 P1(drone1_transform.translation().x(), drone1_transform.translation().y(), drone1_transform.translation().z());  // Start point of the line
+    btVector3 P2(drone2_transform.translation().x(), drone2_transform.translation().y(), drone2_transform.translation().z());
+    btVector3 P3(drone3_transform.translation().x(), drone3_transform.translation().y(), drone3_transform.translation().z()); 
+    btVector3 P4(drone4_transform.translation().x(), drone4_transform.translation().y(), drone4_transform.translation().z());  // Start point of the line
+    btVector3 Origin(origin.translation().x(), origin.translation().y(), origin.translation().z()); 
+    // End point of the line
+    bool intersects1 = checkRayBoxIntersection(dynamicsWorld, P3, P4,"Drone3","Drone4");
+    bool intersects2 = checkRayBoxIntersection(dynamicsWorld, P2, P3,"Drone2","Drone3");
+    bool intersects3 = checkRayBoxIntersection(dynamicsWorld, P1, P2,"Drone1","Drone2");
+    bool intersects4 = checkRayBoxIntersection(dynamicsWorld, Origin, P1,"Origin","Drone1");
+    if (intersects1 || intersects2 || intersects3 || intersects4 )
+    {
+      return false;
+    }
+    return true;
+    }
 
-    // Calculate the rotation to align the cylinder with the direction vector
-    Eigen::Vector3d z_axis(0, 0, 1);  // Default cylinder axis is along Z
-    Eigen::Quaterniond rotation = Eigen::Quaterniond::FromTwoVectors(z_axis, direction);
-    Eigen::Isometry3d cylinder_transform = Eigen::Isometry3d::Identity();
-    cylinder_transform.translation() = center;
-    cylinder_transform.linear() = rotation.toRotationMatrix(); 
-    // Set the transform for the cylinder
-    // Eigen::Affine3d cylinder_transform = Eigen::Translation3d(center) * rotation;
 
-    // Optionally, you can visualize the cylinder by attaching it to the robot state
-    // For example, you can use the robot_state.attachBody function if needed.
-    CylinderInfo info;
-    info.shape = cylinder;
-    info.transform = cylinder_transform;
-    info.height = height;
-    
-    
-    
-    
-    return info; 
+btDiscreteDynamicsWorld* configure_bullet(std::shared_ptr<planning_scene::PlanningScene> planning_scene)
+{
+
+  btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+  btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+  btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+  btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);    // Create collision objects
+  // const Eigen::Affine3d object_transform = planning_scene->getFrameTransform("box3");
+  const collision_detection::WorldConstPtr& world = planning_scene->getWorld();
+  std::vector< std::string > object_ids = world->getObjectIds();
+  for (size_t i = 0; i < object_ids.size(); ++i)
+  {
+      const collision_detection::World::ObjectConstPtr& object = world->getObject(object_ids[i]);
+    //  object->shapes_[0]
+      auto shape = object->shapes_[0]->type;
+      Eigen::Affine3d object_pose = planning_scene->getFrameTransform(object_ids[i]);
+      Eigen::Quaterniond quaternion(object_pose.rotation());
+      // The object in the scene only have one box shape. Should check if more shape types are added. 
+      const shapes::Box* box_shape = dynamic_cast<const shapes::Box*>( object->shapes_[0].get());
+      btCollisionShape* boxShape = new btBoxShape(btVector3(box_shape->size[0]/2, box_shape->size[1]/2, box_shape->size[2]/2));  // Box size (1x1x1)
+      btDefaultMotionState* boxMotionState = new btDefaultMotionState(btTransform(btQuaternion(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w()),btVector3(object_pose.translation().x(),object_pose.translation().y(),object_pose.translation().z()))); // Position at origin
+
+
+      btRigidBody::btRigidBodyConstructionInfo boxRigidBodyCI(0, boxMotionState, boxShape, btVector3(0, 0, 0));
+      btRigidBody* boxRigidBody = new btRigidBody(boxRigidBodyCI);
+      dynamicsWorld->addRigidBody(boxRigidBody);
+  }
+
+
+
+
+  return dynamicsWorld;
+
+
+  // RCLCPP_INFO(node->get_logger(),"The value of my_bool is: %s", intersects ? "true" : "false");
+
+
+
 
 }
-
-
-
 
 
 
@@ -161,12 +196,13 @@ int main(int argc, char * argv[])
     rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_array_publisher_;
   marker_array_publisher_ = node->create_publisher<visualization_msgs::msg::MarkerArray>("viz_const", 10);
   visualization_msgs::msg::MarkerArray marker_array;
+  visualization_msgs::msg::MarkerArray marker_array2;
   rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;
   marker_pub_ = node->create_publisher<visualization_msgs::msg::Marker>("visualization_marker", 10);
   publisher_ = node->create_publisher<nav_msgs::msg::Path>("/cartesian_path_topic", 10);
   namespace rvt = rviz_visual_tools;
-  rclcpp::Publisher<moveit_msgs::msg::PlanningScene>::SharedPtr planning_scene_diff_publisher =
-      node->create_publisher<moveit_msgs::msg::PlanningScene>("planning_scene", 1);
+  // rclcpp::Publisher<moveit_msgs::msg::PlanningScene>::SharedPtr planning_scene_diff_publisher =
+  //     node->create_publisher<moveit_msgs::msg::PlanningScene>("planning_scene", 1);
 // --------------------------------------- Robot_State && PlanningScene -----------------------------------------------
   std::vector<double> joint_values;
   const std::string PLANNING_GROUP = "Group1";
@@ -185,6 +221,10 @@ int main(int argc, char * argv[])
 
   // Creating PlanningScene object
   std::shared_ptr<planning_scene::PlanningScene> planning_scene = std::make_shared<planning_scene::PlanningScene>(robot_model);
+
+
+
+
   bool found_ik = false;
   bool isValid = false;
   auto request = std::make_shared<moveit_msgs::srv::GetPlanningScene::Request>();
@@ -325,20 +365,7 @@ int main(int argc, char * argv[])
   
     moveit::core::RobotState goal_state(robot_model);
     std::vector<double> joint_values1;
-  // constraint_samplers::ConstraintSamplerManager sampler_manager;
 
-
-  // const kinematics::KinematicsBaseConstPtr& solver = joint_model_group->getSolverInstance();
-  //   if (!solver)
-  //   {
-  //     RCLCPP_ERROR(node->get_logger(), "No kinematics solver instantiated for group '%s'", joint_model_group->getName().c_str());
-  //     return false;
-  //   }
-  //   else
-  //   {
-  //     RCLCPP_ERROR(node->get_logger(), "Kinematics solver instantiated for group '%s'", joint_model_group->getName().c_str());
-
-  //   }
 
 
     for (std::size_t i = 1; i < path.poses.size(); ++i){
@@ -350,6 +377,7 @@ int main(int argc, char * argv[])
       ik_pose_stamped.pose = path.poses[i].pose;
 
       kinematic_constraints::VisibilityConstraint vis_constraint_checker(robot_model); 
+      
       auto future = client_->async_send_request(request);
       if (rclcpp::spin_until_future_complete(node->get_node_base_interface(), future) == rclcpp::FutureReturnCode::SUCCESS){
         auto response = future.get();  // Access the service response
@@ -360,107 +388,21 @@ int main(int argc, char * argv[])
       } else {
         RCLCPP_ERROR(node->get_logger(), "Failed to call service get_planning_scene");
       }
+      auto dynamicsWorld = configure_bullet(planning_scene);
+      std::function<bool( const moveit::core::RobotState&, bool)> feasible_predicate = [node,dynamicsWorld](const moveit::core::RobotState& robot_state,bool){
 
-
-      moveit_msgs::msg::VisibilityConstraint visibility_constraint;
-      geometry_msgs::msg::PoseStamped sensor_pose;
-      sensor_pose.header.frame_id = "Drone3";  // Set the sensor frame to Drone3
-      sensor_pose.pose.position.x = 0.0;
-      sensor_pose.pose.position.y = 0;
-      sensor_pose.pose.position.z = 0.0;
-      sensor_pose.pose.orientation.w = 1.0;  // Identity orientation
-      visibility_constraint.sensor_pose = sensor_pose;
-      visibility_constraint.target_pose.header.frame_id = "Drone4";  // Set target to Drone4
-      visibility_constraint.target_pose.pose.position.z=0; 
-      visibility_constraint.target_radius = 0.1; 
-      visibility_constraint.max_view_angle = 0;  // 180 degrees just for completeness, but not critical here
-      visibility_constraint.weight = 1.0;
-      visibility_constraint.max_range_angle = 0; 
-      // std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
-      // std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
-      // tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node->get_clock());
-      // tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer
-      Eigen::Isometry3d drone4_transform = robot_state.getFrameTransform("Drone4");
-
-      moveit::core::Transforms transforms("Drone4"); // Provide the target frame
-      transforms.setTransform(drone4_transform, "Drone4");
-      vis_constraint_checker.configure(visibility_constraint, transforms);
-      if (!vis_constraint_checker.configure(visibility_constraint, transforms))
-      {
-          RCLCPP_ERROR(node->get_logger(), "Failed to configure visibility constraint.");
-      }
-      else{
-          RCLCPP_ERROR(node->get_logger(), "Configured visibility constraint.");
-
-      }
-      vis_constraint_checker.getMarkers(robot_state,marker_array);
-      marker_array_publisher_->publish(marker_array);
-      if(vis_constraint_checker.enabled()){
-          RCLCPP_ERROR(node->get_logger(), "Is enabled");
-      }
-      moveit_msgs::msg::VisibilityConstraint visibility_constraint2;
-      kinematic_constraints::ConstraintEvaluationResult result = vis_constraint_checker.decide(robot_state,true);
-      bool success = result.satisfied;
-      if (success){
-          RCLCPP_ERROR(node->get_logger(), "SATISFIED------------------------------------");
-      }
-      else
-      {
-          RCLCPP_ERROR(node->get_logger(), "NOT SATISFIED");
-      }
-
-
-      CylinderInfo cylinder_info = createCylinderBetweenLinks(robot_state, "Drone3", "Drone4", 0.1);
-      
-      auto const collision_object12 = [frame_id ="base_link",cylinder_info] {
-        moveit_msgs::msg::AttachedCollisionObject collision_object;
-        collision_object.object.header.frame_id = frame_id;
-        collision_object.link_name = "cylinder";
-        collision_object.object.id = "cylinder";
-
-        shape_msgs::msg::SolidPrimitive primitive;
-
-        // Define the size of the box in meters
-        primitive.type = primitive.CYLINDER;
-        primitive.dimensions.resize(2);
-        primitive.dimensions[shape_msgs::msg::SolidPrimitive::CYLINDER_HEIGHT] = cylinder_info.height;  // Height in meters
-        primitive.dimensions[shape_msgs::msg::SolidPrimitive::CYLINDER_RADIUS] = 0.01;
-
-        // Define the pose of the box (relative to the frame_id)
-        geometry_msgs::msg::Pose box_pose;
-        box_pose.position.x =  cylinder_info.transform.translation().x();
-        box_pose.position.y =  cylinder_info.transform.translation().y();
-        box_pose.position.z =  cylinder_info.transform.translation().z();
-        Eigen::Quaterniond quat(cylinder_info.transform.rotation());
-
-        box_pose.orientation.z = quat.z();
-        box_pose.orientation.x = quat.x();
-        box_pose.orientation.y = quat.y();
-        box_pose.orientation.w = quat.w();
-
-        collision_object.object.primitives.push_back(primitive);
-        collision_object.object.primitive_poses.push_back(box_pose);
-        // collision_object.object.operation = collision_object.ADD;
-        collision_object.object.operation = collision_object.object.ADD;
-        collision_object.touch_links = std::vector<std::string>{ "Drone3", "Drone4" };
-        return collision_object;
-      }();
-
-    RCLCPP_INFO(LOGGER, "Adding the object into the world at the location of the hand.");
-    moveit_msgs::msg::PlanningScene planning_scene1;
-    planning_scene1.world.collision_objects.push_back(collision_object12.object);
-
-
-    /* Carry out the REMOVE + ATTACH operation */
-    moveit_msgs::msg::CollisionObject remove_object;
-    remove_object.id = "cylinder";
-    remove_object.header.frame_id = "base_link";
-    remove_object.operation = remove_object.REMOVE;
-    // planning_scene1.world.collision_objects.clear();
-    planning_scene1.world.collision_objects.push_back(remove_object);
-    planning_scene1.robot_state.attached_collision_objects.push_back(collision_object12);
-    planning_scene1.robot_state.is_diff = true;
-    planning_scene_diff_publisher->publish(planning_scene1);
+        bool LoS = checkRayBoxIntersection(robot_state,dynamicsWorld);
+        if (LoS)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+        RCLCPP_INFO(LOGGER,"%s", LoS ? "true" : "false");  
+      };
+      planning_scene->setStateFeasibilityPredicate(feasible_predicate) ;
 
 
 
@@ -472,38 +414,15 @@ int main(int argc, char * argv[])
 
 
 
+// ------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 
-      // const moveit::core::LinkModel* parent_link = robot_state.getRobotModel()->getLinkModel("Drone3");
-      // std::set<std::string> touch_links = {"Drone3", "Drone4"};
-      // trajectory_msgs::msg::JointTrajectory detach_posture;
-      // CylinderInfo cylinder_info = createCylinderBetweenLinks(robot_state, "Drone3", "Drone4", 0.1);
-      // robot_state.attachBody("cylinder_body",cylinder_info.transform,std::vector<shapes::ShapeConstPtr>{cylinder_info.shape},std::vector<Eigen::Isometry3d>{cylinder_info.transform}, touch_links,"Drone3" );
-      
-      
-      
-      // shapes::Mesh* visibility_cone = vis_constraint_checker.getVisibilityCone(robot_state);
-      // Eigen::Affine3d attach_transform = Eigen::Translation3d(0.0, 0.0, 0.5) * Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitZ());
-      // robot_state.attachBody("Cone4",visibility_cone,attach_transform,touch_links,"Drone3")
-
-      // geometry_msgs::msg::PoseStamped sensor_pose2;
-      // sensor_pose2.header.frame_id = "Drone2";  // Set the sensor frame to Drone3
-      // sensor_pose2.pose.position.x = 0.0;
-      // sensor_pose2.pose.position.y = 0.0;
-      // sensor_pose2.pose.position.z = -0.5;
-      // sensor_pose2.pose.orientation.w = 1.0;  // Identity orientation
-      // visibility_constraint2.sensor_pose = sensor_pose2;
-      // visibility_constraint2.target_pose.header.frame_id = "Drone3";  // Set target to Drone4
-      // visibility_constraint2.target_radius = 0.5; 
-      // visibility_constraint2.max_view_angle = 0;  // 180 degrees just for completeness, but not critical here
-      // visibility_constraint2.weight = 1.0;
-      // visibility_constraint2.max_range_angle = 0; 
-      // while(!planning_scene->isStateValid(goal_state,"Group1") && rclcpp::ok()){
-      //   found_ik = goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn);
-      //   RCLCPP_ERROR(LOGGER, "Goal State is not valid");
-      // }
 
       planning_interface::MotionPlanRequest req;
       req.pipeline_id = "ompl";
@@ -522,14 +441,8 @@ int main(int argc, char * argv[])
       std::vector<double> tolerance_angle(3, 1);
       planning_interface::MotionPlanResponse res;
 
-    // moveit_msgs::msg::Constraints pose_goal =
-    // kinematic_constraints::constructGoalConstraints("Drone4", waypoints_vec[i]);
-    // moveit_msgs::msg::Constraints pose_goal =
-        // kinematic_constraints::constructGoalConstraints("Drone4", ik_pose_stamped,tolerance_pose,tolerance_angle);    
 
-      // joint_goal[]
       req.goal_constraints.clear();
-      // req.path_constraints.visibility_constraints.push_back(vis_const);
       
       moveit_msgs::msg::PositionConstraint position_constraint;
       position_constraint.link_name = "Drone4";
@@ -552,28 +465,22 @@ int main(int argc, char * argv[])
 
 
 
-      // goal_state.copyJointGroupPositions(joint_model_group, joint_values1);
-      // goal_state.setJointGroupPositions(joint_model_group, joint_values1);
-
 
       moveit_msgs::msg::Constraints constraints;
       req.goal_constraints.clear();
       constraints.position_constraints.push_back(position_constraint);
-      constraints.visibility_constraints.push_back(visibility_constraint);   
-      // constraints.visibility_constraints.push_back(visibility_constraint2);   
-      // req.goal_constraints.decide(robot_state);
     
     
     
-      if(goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn)){
-        moveit_msgs::msg::Constraints joint_goal =
-          kinematic_constraints::constructGoalConstraints(goal_state, joint_model_group, tolerance_above, tolerance_below); 
-         // found_ik = goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn);
-        RCLCPP_ERROR(LOGGER, "IK valid.");
+      // if(goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn)){
+      //   moveit_msgs::msg::Constraints joint_goal =
+      //     kinematic_constraints::constructGoalConstraints(goal_state, joint_model_group, tolerance_above, tolerance_below); 
+      //    // found_ik = goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn);
+      //   RCLCPP_ERROR(LOGGER, "IK valid.");
 
-        req.goal_constraints.push_back(joint_goal);
+      //   req.goal_constraints.push_back(joint_goal);
 
-      }
+      // }
 
       req.goal_constraints.push_back(constraints);
       
@@ -582,7 +489,6 @@ int main(int argc, char * argv[])
         RCLCPP_INFO(LOGGER, "Failed to solve planning problem. Retrying");
       }
 
-      
       if(planning_scene->isPathValid(*res.trajectory_)){
       moveit_msgs::msg::MotionPlanResponse msg;
       RCLCPP_INFO(LOGGER, "Planning took %.2f seconds", res.planning_time_);
@@ -595,9 +501,19 @@ int main(int argc, char * argv[])
       }
       }
           
-        
+     
     }
-  
+
+	
+
+    // std::cout << "Translation (x, y, z): " 
+    //         << drone4_transform.translation().x() << ", " 
+    //         << drone4_transform.translation().y() << ", " 
+    //         << drone4_transform.translation().z() << std::endl;
+    // std::cout << "Translation (x, y, z): " 
+    //         << drone3_transform.translation().x() << ", " 
+    //         << drone3_transform.translation().y() << ", " 
+    //         << drone3_transform.translation().z() << std::endl;
   // Shutdown ROS 
   rclcpp::shutdown();  
   return 0;

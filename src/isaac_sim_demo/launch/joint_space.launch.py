@@ -29,9 +29,15 @@ def generate_launch_description():
                 ompl_planning_pipeline_config],
             )
 
+    lines =  Node(
+                package="isaac_sim_demo",
+                executable="drone_marker_publisher",
+                name="drone_marker_publisher",
+                output="screen",
 
+            )
     return LaunchDescription([
 
-        cpp_demo
-        
+        cpp_demo,
+        lines
     ])
