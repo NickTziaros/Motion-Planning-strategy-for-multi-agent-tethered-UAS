@@ -10,8 +10,3 @@ source;share/moveit_core/hook/path.sh
 source;share/moveit_core/hook/pythonscriptspath.ps1
 source;share/moveit_core/hook/pythonscriptspath.dsv
 source;share/moveit_core/hook/pythonscriptspath.sh
-source;share/moveit_core/local_setup.bash
-source;share/moveit_core/local_setup.dsv
-source;share/moveit_core/local_setup.ps1
-source;share/moveit_core/local_setup.sh
-source;share/moveit_core/local_setup.zsh

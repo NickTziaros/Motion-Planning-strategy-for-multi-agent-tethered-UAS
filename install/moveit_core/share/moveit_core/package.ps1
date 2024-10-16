@@ -114,6 +114,5 @@ colcon_package_source_powershell_script "$env:COLCON_CURRENT_PREFIX\share/moveit
 colcon_package_source_powershell_script "$env:COLCON_CURRENT_PREFIX\share/moveit_core/hook/ld_library_path_lib.ps1"
 colcon_package_source_powershell_script "$env:COLCON_CURRENT_PREFIX\share/moveit_core/hook/path.ps1"
 colcon_package_source_powershell_script "$env:COLCON_CURRENT_PREFIX\share/moveit_core/hook/pythonscriptspath.ps1"
-colcon_package_source_powershell_script "$env:COLCON_CURRENT_PREFIX\share/moveit_core/local_setup.ps1"
 
 Remove-Item Env:\COLCON_CURRENT_PREFIX

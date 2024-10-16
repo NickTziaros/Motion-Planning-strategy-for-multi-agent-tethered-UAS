@@ -49,7 +49,7 @@ def generate_launch_description():
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
-        .planning_pipelines(pipelines=["ompl", "chomp"])
+        .planning_pipelines(pipelines=["ompl", "stomp"])
         .to_moveit_configs()
     )   
     package_path = get_package_share_directory('four_drone_demo')
@@ -63,7 +63,7 @@ def generate_launch_description():
     rviz= Node(
                     package='rviz2',
                     executable='rviz2',
-                    arguments=['-d', os.path.join(package_path, 'config', 'moveit.rviz')],
+                    arguments=['-d', os.path.join(package_path, 'config', 'mark_state.rviz')],
                     parameters=rviz_parameters,
                 )    
 
@@ -99,7 +99,7 @@ def generate_launch_description():
         # 'planning_plugin' : 'ompl_interface/OMPLPlanner',
 
         # change this to select planner
-        'default_planning_pipeline': 'ompl',
+        'default_planning_pipeline': 'stomp',
         'enforce_joint_model_state_space': 'True',
         'request_adapters' : "default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints",
         'start_state_max_bounds_error' : 0.1 }

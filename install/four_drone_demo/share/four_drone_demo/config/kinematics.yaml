@@ -10,8 +10,8 @@ Group1:
 
   # kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
   # kinematics_solver_search_resolution: 0.005
-  # kinematics_solver_timeout: 0.15
-  # kinematics_solver_attempts: 3
+  # kinematics_solver_timeout: 10.0
+  # kinematics_solver_attempts: 10.0
   # position_only_ik: True
 
 # Group1:
@@ -20,16 +20,13 @@ Group1:
   # kinematics_solver_timeout: 4.0
 
   kinematics_solver: pick_ik/PickIkPlugin
-  kinematics_solver_timeout: 10.0
-  kinematics_solver_attempts: 10
-  mode: global
-  stop_optimization_on_valid_solution: false
+  kinematics_solver_timeout: 1.0
+  kinematics_solver_attempts: 2.0
+  mode: local
   position_scale: 1.0
   rotation_scale: 0.0
   position_threshold: 0.01
-  orientation_threshold: 0.01
-  cost_threshold: 0.001
-  minimal_displacement_weight: 0.001
-  gd_step_size: 0.00001
-  approximate_solution_position_threshold : 0.1
-  approximate_solution_orientation_threshold: 0.1
+  orientation_threshold: 1.0
+  cost_threshold: 0.0001
+  minimal_displacement_weight: 0.0001
+  gd_step_size: 0.0001
