@@ -15,7 +15,7 @@ def generate_launch_description():
     # moveit_config = MoveItConfigsBuilder("isaac_twin", package_name="test_moveit_config").to_moveit_configs()
     
     my_package_dir = get_package_share_directory('isaac_sim_demo')
-    moveit_dir= get_package_share_directory('test_moveit_config')
+    moveit_dir= get_package_share_directory('prismatic_moveit_config')
     tf_to_pos = IncludeLaunchDescription(
       PythonLaunchDescriptionSource([os.path.join(
          my_package_dir, 'launch'),
