@@ -112,8 +112,12 @@ ament_target_dependencies(tf_to_pos_node  rclcpp geometry_msgs tf2_ros nav_msgs 
 add_executable(moveit_test_node src/moveit_demo.cpp)
 ament_target_dependencies(moveit_test_node  moveit_ros_planning_interface  moveit_visual_tools four_drone_demo)
 
-add_executable(cpp_demo src/cpp_int.cpp)
-ament_target_dependencies(cpp_demo  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs)
+add_executable(joint_space src/joint_space.cpp)
+ament_target_dependencies(joint_space  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs nav_msgs)
+
+add_executable(cartesian src/cartesian.cpp)
+ament_target_dependencies(cartesian  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs nav_msgs)
+
 
 add_executable(spawn_scene src/spawn_scene.cpp)
 ament_target_dependencies(spawn_scene  moveit_ros_planning_interface  moveit_visual_tools rclcpp tf2_geometry_msgs)
@@ -123,6 +127,8 @@ ament_target_dependencies(ompl_lifecycle  rclcpp std_msgs std_srvs lifecycle_msg
 target_link_libraries(ompl_lifecycle ${PROJECT_NAME}_library ${OMPL_LIBRARIES})
 
 
+add_executable(drone_marker_publisher src/drone_marker_publisher.cpp)
+ament_target_dependencies(drone_marker_publisher visualization_msgs rclcpp tf2_geometry_msgs)
 
 
 # when the ompl package is isntalled it provides the variable ${OMPL_LIBRARIES}
@@ -143,8 +149,10 @@ install(TARGETS
   visualization_node
   moveit_test_node
   ompl_lifecycle
-  cpp_demo
+  joint_space
   spawn_scene
+  cartesian
+  drone_marker_publisher
   DESTINATION lib/${PROJECT_NAME}
 )
 

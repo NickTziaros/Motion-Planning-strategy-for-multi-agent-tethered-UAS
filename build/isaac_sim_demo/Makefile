@@ -289,17 +289,30 @@ moveit_test_node/fast:
 .PHONY : moveit_test_node/fast
 
 #=============================================================================
-# Target rules for targets named cpp_demo
+# Target rules for targets named joint_space
 
 # Build rule for target.
-cpp_demo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cpp_demo
-.PHONY : cpp_demo
+joint_space: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 joint_space
+.PHONY : joint_space
 
 # fast build rule for target.
-cpp_demo/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/build
-.PHONY : cpp_demo/fast
+joint_space/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/joint_space.dir/build.make CMakeFiles/joint_space.dir/build
+.PHONY : joint_space/fast
+
+#=============================================================================
+# Target rules for targets named cartesian
+
+# Build rule for target.
+cartesian: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cartesian
+.PHONY : cartesian
+
+# fast build rule for target.
+cartesian/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cartesian.dir/build.make CMakeFiles/cartesian.dir/build
+.PHONY : cartesian/fast
 
 #=============================================================================
 # Target rules for targets named spawn_scene
@@ -326,6 +339,19 @@ ompl_lifecycle: cmake_check_build_system
 ompl_lifecycle/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ompl_lifecycle.dir/build.make CMakeFiles/ompl_lifecycle.dir/build
 .PHONY : ompl_lifecycle/fast
+
+#=============================================================================
+# Target rules for targets named drone_marker_publisher
+
+# Build rule for target.
+drone_marker_publisher: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 drone_marker_publisher
+.PHONY : drone_marker_publisher
+
+# fast build rule for target.
+drone_marker_publisher/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/drone_marker_publisher.dir/build.make CMakeFiles/drone_marker_publisher.dir/build
+.PHONY : drone_marker_publisher/fast
 
 src/RRT_controller.o: src/RRT_controller.cpp.o
 .PHONY : src/RRT_controller.o
@@ -375,29 +401,77 @@ src/StateSubscriber_node.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/StateSubscriber_node.dir/build.make CMakeFiles/StateSubscriber_node.dir/src/StateSubscriber_node.cpp.s
 .PHONY : src/StateSubscriber_node.cpp.s
 
-src/cpp_int.o: src/cpp_int.cpp.o
-.PHONY : src/cpp_int.o
+src/cartesian.o: src/cartesian.cpp.o
+.PHONY : src/cartesian.o
 
 # target to build an object file
-src/cpp_int.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.o
-.PHONY : src/cpp_int.cpp.o
+src/cartesian.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cartesian.dir/build.make CMakeFiles/cartesian.dir/src/cartesian.cpp.o
+.PHONY : src/cartesian.cpp.o
 
-src/cpp_int.i: src/cpp_int.cpp.i
-.PHONY : src/cpp_int.i
+src/cartesian.i: src/cartesian.cpp.i
+.PHONY : src/cartesian.i
 
 # target to preprocess a source file
-src/cpp_int.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.i
-.PHONY : src/cpp_int.cpp.i
+src/cartesian.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cartesian.dir/build.make CMakeFiles/cartesian.dir/src/cartesian.cpp.i
+.PHONY : src/cartesian.cpp.i
 
-src/cpp_int.s: src/cpp_int.cpp.s
-.PHONY : src/cpp_int.s
+src/cartesian.s: src/cartesian.cpp.s
+.PHONY : src/cartesian.s
 
 # target to generate assembly for a file
-src/cpp_int.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_demo.dir/build.make CMakeFiles/cpp_demo.dir/src/cpp_int.cpp.s
-.PHONY : src/cpp_int.cpp.s
+src/cartesian.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cartesian.dir/build.make CMakeFiles/cartesian.dir/src/cartesian.cpp.s
+.PHONY : src/cartesian.cpp.s
+
+src/drone_marker_publisher.o: src/drone_marker_publisher.cpp.o
+.PHONY : src/drone_marker_publisher.o
+
+# target to build an object file
+src/drone_marker_publisher.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/drone_marker_publisher.dir/build.make CMakeFiles/drone_marker_publisher.dir/src/drone_marker_publisher.cpp.o
+.PHONY : src/drone_marker_publisher.cpp.o
+
+src/drone_marker_publisher.i: src/drone_marker_publisher.cpp.i
+.PHONY : src/drone_marker_publisher.i
+
+# target to preprocess a source file
+src/drone_marker_publisher.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/drone_marker_publisher.dir/build.make CMakeFiles/drone_marker_publisher.dir/src/drone_marker_publisher.cpp.i
+.PHONY : src/drone_marker_publisher.cpp.i
+
+src/drone_marker_publisher.s: src/drone_marker_publisher.cpp.s
+.PHONY : src/drone_marker_publisher.s
+
+# target to generate assembly for a file
+src/drone_marker_publisher.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/drone_marker_publisher.dir/build.make CMakeFiles/drone_marker_publisher.dir/src/drone_marker_publisher.cpp.s
+.PHONY : src/drone_marker_publisher.cpp.s
+
+src/joint_space.o: src/joint_space.cpp.o
+.PHONY : src/joint_space.o
+
+# target to build an object file
+src/joint_space.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/joint_space.dir/build.make CMakeFiles/joint_space.dir/src/joint_space.cpp.o
+.PHONY : src/joint_space.cpp.o
+
+src/joint_space.i: src/joint_space.cpp.i
+.PHONY : src/joint_space.i
+
+# target to preprocess a source file
+src/joint_space.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/joint_space.dir/build.make CMakeFiles/joint_space.dir/src/joint_space.cpp.i
+.PHONY : src/joint_space.cpp.i
+
+src/joint_space.s: src/joint_space.cpp.s
+.PHONY : src/joint_space.s
+
+# target to generate assembly for a file
+src/joint_space.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/joint_space.dir/build.make CMakeFiles/joint_space.dir/src/joint_space.cpp.s
+.PHONY : src/joint_space.cpp.s
 
 src/markers.o: src/markers.cpp.o
 .PHONY : src/markers.o
@@ -583,8 +657,10 @@ help:
 	@echo "... isaac_sim_demo_uninstall"
 	@echo "... uninstall"
 	@echo "... StateSubscriber_node"
-	@echo "... cpp_demo"
+	@echo "... cartesian"
+	@echo "... drone_marker_publisher"
 	@echo "... isaac_sim_demo_library"
+	@echo "... joint_space"
 	@echo "... markers_node"
 	@echo "... moveit_test_node"
 	@echo "... ompl_controller_node"
@@ -598,9 +674,15 @@ help:
 	@echo "... src/StateSubscriber_node.o"
 	@echo "... src/StateSubscriber_node.i"
 	@echo "... src/StateSubscriber_node.s"
-	@echo "... src/cpp_int.o"
-	@echo "... src/cpp_int.i"
-	@echo "... src/cpp_int.s"
+	@echo "... src/cartesian.o"
+	@echo "... src/cartesian.i"
+	@echo "... src/cartesian.s"
+	@echo "... src/drone_marker_publisher.o"
+	@echo "... src/drone_marker_publisher.i"
+	@echo "... src/drone_marker_publisher.s"
+	@echo "... src/joint_space.o"
+	@echo "... src/joint_space.i"
+	@echo "... src/joint_space.s"
 	@echo "... src/markers.o"
 	@echo "... src/markers.i"
 	@echo "... src/markers.s"

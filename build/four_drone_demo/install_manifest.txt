@@ -32,12 +32,13 @@
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/kinematics.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/moveit.rviz
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/joint_limits.yaml
+/home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/ompl_planning.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/hybrid_planning_manager.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/local_planner.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/chomp_planning.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/global_planner.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/hybrid_planning_demo.rviz
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/trajopt_planning.yaml
+/home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/stomp_planning.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/common_hybrid_planning_params.yaml
-/home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/config/ompl_planning.yaml
 /home/ubuntu/ros2_ws/install/four_drone_demo/share/four_drone_demo/.setup_assistant

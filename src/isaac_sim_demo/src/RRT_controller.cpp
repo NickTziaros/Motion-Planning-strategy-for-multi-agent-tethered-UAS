@@ -137,6 +137,7 @@ ompl::geometric::SimpleSetup ompl_controller::configure(std::vector<double> quad
 
   
     // ss.setStateValidityChecker([](const ob::State *state) { return isStateValid(state); });
+    ss.setStateValidityChecker(isStateValid);
     ss.setStartAndGoalStates(start, goal);
 
     ompl::geometric::SimpleSetup* ss_pointer = &ss;

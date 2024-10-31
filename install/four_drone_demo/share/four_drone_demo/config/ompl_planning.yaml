@@ -16,7 +16,7 @@ response_adapters:
 
 
 
-ompl.default_workspace_bounds : 15
+ompl.default_workspace_bounds : 20
 ompl.max_sampling_attempts : 1000
 
 planner_configs:
@@ -67,7 +67,7 @@ planner_configs:
     goal_bias: 0.05  # When close to goal select goal, with this probability? default: 0.05
   RRTConnect:
     type: geometric::RRTConnect
-    range: 0.0  # Max motion added to tree. ==> maxDistance_ default: 0.0, if 0.0, set on setup()
+    range: 0.01  # Max motion added to tree. ==> maxDistance_ default: 0.0, if 0.0, set on setup()
   RRTstar:
     type: geometric::RRTstar
     range: 0.0  # Max motion added to tree. ==> maxDistance_ default: 0.0, if 0.0, set on setup()
@@ -84,9 +84,9 @@ planner_configs:
     frountier_threshold: 0.0  # dist new state to nearest neighbor to disqualify as frontier. default: 0.0 set in setup()
     frountierNodeRatio: 0.1  # 1/10, or 1 nonfrontier for every 10 frontier. default: 0.1
     k_constant: 0.0  # value used to normalize expresssion. default: 0.0 set in setup()
-  PRM:
+  PRM:    
     type: geometric::PRM
-    max_nearest_neighbors: 10  # use k nearest neighbors. default: 10
+    max_nearest_neighbors: 500  # use k nearest neighbors. default: 10
   PRMstar:
     type: geometric::PRMstar
   FMT:
@@ -190,3 +190,7 @@ Group1:
   # MoveIt's implementation is broken and can generate infeasible trajectories -- v4hn
   enforce_joint_model_state_space: False
   longest_valid_segment_fraction: 0.001
+  path_tolerance : 0.3
+  resample_dt : 0.1
+  min_angle_change: 1.57
+  max_sampling_attempts: 10000
