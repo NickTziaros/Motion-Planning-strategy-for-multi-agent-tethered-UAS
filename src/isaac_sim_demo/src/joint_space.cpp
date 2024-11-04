@@ -192,6 +192,7 @@ int main(int argc, char * argv[])
   node_options.automatically_declare_parameters_from_overrides(true);
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("cpp_demo", node_options);  
   rclcpp::executors::SingleThreadedExecutor executor;
+  auto start_time = node->now();
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr publisher_;
     rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_array_publisher_;
   marker_array_publisher_ = node->create_publisher<visualization_msgs::msg::MarkerArray>("viz_const", 10);
@@ -274,7 +275,7 @@ int main(int argc, char * argv[])
     visual_tools.trigger();
     // check if IK solution is in collision
     if (planning_scene->isStateColliding(dummy_state,"Group1",true)||!checkRayBoxIntersection(dummy_state,dynamicsWorld)){
-    RCLCPP_INFO(LOGGER, "not valid ik sol");
+    // RCLCPP_INFO(LOGGER, "not valid ik sol");
       return false;
     }
 
@@ -385,6 +386,7 @@ int main(int argc, char * argv[])
       } else {
         RCLCPP_ERROR(node->get_logger(), "Failed to call service get_planning_scene");
       }
+
       std::function<bool( const moveit::core::RobotState&, bool)> feasible_predicate = [node,dynamicsWorld](const moveit::core::RobotState& robot_state,bool){
 
         bool LoS = checkRayBoxIntersection(robot_state,dynamicsWorld);
@@ -422,9 +424,9 @@ int main(int argc, char * argv[])
 
       planning_interface::MotionPlanRequest req;
       req.pipeline_id = "ompl";
-      req.planner_id = "RRT";
-      // req.planner_id = "PRM";
-      req.allowed_planning_time = 50.0;
+      // req.planner_id = "RRTConnect";
+      req.planner_id = "PRM";
+      req.allowed_planning_time = 30.0;
       req.max_velocity_scaling_factor = 1.0;
       req.num_planning_attempts = 20.0;
       req.group_name = "Group1";
@@ -469,15 +471,15 @@ int main(int argc, char * argv[])
     
     
     
-      // if(goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn)){
-      //   moveit_msgs::msg::Constraints joint_goal =
-      //     kinematic_constraints::constructGoalConstraints(goal_state, joint_model_group, tolerance_above, tolerance_below); 
-      //    // found_ik = goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn);
-      //   RCLCPP_ERROR(LOGGER, "IK valid.");
+      if(goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn)){
+        moveit_msgs::msg::Constraints joint_goal =
+          kinematic_constraints::constructGoalConstraints(goal_state, joint_model_group, tolerance_above, tolerance_below); 
+         // found_ik = goal_state.setFromIK(joint_model_group, ik_pose, timeout,callback_fn);
+        RCLCPP_ERROR(LOGGER, "IK valid.");
 
-      //   req.goal_constraints.push_back(joint_goal);
+        req.goal_constraints.push_back(joint_goal);
 
-      // }
+      }
 
       req.goal_constraints.push_back(constraints);
       
@@ -517,6 +519,10 @@ int main(int argc, char * argv[])
     //         << drone3_transform.translation().y() << ", " 
     //         << drone3_transform.translation().z() << std::endl;
   // Shutdown ROS 
+  auto end_time = node->now();
+  rclcpp::Duration execution_duration = end_time - start_time;
+  RCLCPP_INFO(node->get_logger(), "Execution took %f seconds and %ld nanoseconds.",
+              execution_duration.seconds(), execution_duration.nanoseconds());
   rclcpp::shutdown();  
   return 0;
 }
