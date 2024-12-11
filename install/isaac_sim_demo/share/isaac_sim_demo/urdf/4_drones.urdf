@@ -37,27 +37,12 @@
       </geometry>
     </visual>
   </link>
-  <!-- <link name="spherical_1_z">
-    <inertial>
-      <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0.05"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.05"/>
-      <geometry>
-        <box size="0.01 0.01 0"/>
-      </geometry>
-    </visual>
-  </link> -->
   <joint name="spherical_1_x" type="prismatic">
     <parent link="base_link"/>
     <child link="spherical_1_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_1_y" type="prismatic">
     <parent link="spherical_1_x"/>
@@ -66,7 +51,6 @@
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
 
     <axis xyz="0 1 0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_1_z" type="prismatic">
     <parent link="spherical_1_y"/>
@@ -75,13 +59,7 @@
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <!-- <joint name="prismatic_joint_1" type="prismatic">
-    <parent link="spherical_1_z"/>
-    <child link="Drone1"/>
-    <origin rpy="0 0 0" xyz="0 0 0.05"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
-  </joint> -->
+
   <link name="Drone1">
     <inertial>
       <mass value="0.1"/>
@@ -91,13 +69,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -127,26 +105,13 @@
       </geometry>
     </visual>
   </link>
-  <!-- <link name="spherical_2_z">
-    <inertial>
-      <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.01 0.01 0"/>
-      </geometry>
-    </visual>
-  </link> -->
+
   <joint name="spherical_2_x" type="prismatic">
     <parent link="Drone1"/>
     <child link="spherical_2_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_2_y" type="prismatic">
     <parent link="spherical_2_x"/>
@@ -154,7 +119,6 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_2_z" type="prismatic">
     <parent link="spherical_2_y"/>
@@ -163,13 +127,7 @@
     <axis xyz="0 0 1"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
   </joint>
-  <!-- <joint name="prismatic_joint_2" type="prismatic">
-    <parent link="spherical_2_z"/>
-    <child link="Drone2"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
-  </joint> -->
+
   <link name="Drone2">
     <inertial>
       <mass value="0.1"/>
@@ -179,13 +137,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -215,26 +173,13 @@
       </geometry>
     </visual>
   </link>
-  <!-- <link name="spherical_3_z">
-    <inertial>
-      <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.01 0.01 0"/>
-      </geometry>
-    </visual>
-  </link> -->
+
   <joint name="spherical_3_x" type="prismatic">
     <parent link="Drone2"/>
     <child link="spherical_3_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_3_y" type="prismatic">
     <parent link="spherical_3_x"/>
@@ -250,13 +195,6 @@
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <!-- <joint name="prismatic_joint_3" type="prismatic">
-    <parent link="spherical_3_z"/>
-    <child link="Drone3"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
-  </joint> -->
   <link name="Drone3">
     <inertial>
       <mass value="0.1"/>
@@ -266,13 +204,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </visual>
   </link>
@@ -302,26 +240,13 @@
       </geometry>
     </visual>
   </link>
-  <!-- <link name="spherical_4_z">
-    <inertial>
-      <mass value="0.1"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.0001666666666666667" ixy="0" ixz="0" iyy="0.0001666666666666667" iyz="0" izz="0.0001666666666666667"/>
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <box size="0.01 0.01 0"/>
-      </geometry>
-    </visual>
-  </link> -->
+
   <joint name="spherical_4_x" type="prismatic">
     <parent link="Drone3"/>
     <child link="spherical_4_x"/>
     <origin rpy="0 0 0" xyz="0 0 0.0"/>
     <axis xyz="1 0 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_4_y" type="prismatic">
     <parent link="spherical_4_x"/>
@@ -329,7 +254,6 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
-    <!-- <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/> -->
   </joint>
   <joint name="spherical_4_z" type="prismatic">
     <parent link="spherical_4_y"/>
@@ -338,13 +262,7 @@
     <axis xyz="0 0 1"/>
     <limit effort="10" lower="-4" upper="4" velocity="1.0"/>
   </joint>
-  <!-- <joint name="prismatic_joint_4" type="prismatic">
-    <parent link="spherical_4_z"/>
-    <child link="Drone4"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="10" lower="0" upper="4" velocity="1.0"/>
-  </joint> -->
+
   <link name="Drone4">
     <inertial>
       <mass value="0.1"/>
@@ -354,13 +272,13 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </collision>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.6 0.6 0.2"/>
+        <box size="0.65 0.65 0.25"/>
       </geometry>
     </visual>
   </link>

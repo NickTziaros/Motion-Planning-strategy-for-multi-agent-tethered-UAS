@@ -56,10 +56,10 @@
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="World" type="fixed" parent_frame="World" child_link="base_link"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="Drone1" link2="Drone2" reason="Adjacent"/>
+    <!-- <disable_collisions link1="Drone1" link2="Drone2" reason="Adjacent"/>
     <disable_collisions link1="Drone1" link2="Drone3" reason="Default"/>
     <disable_collisions link1="Drone1" link2="Drone4" reason="Default"/>
     <disable_collisions link1="Drone2" link2="Drone3" reason="Adjacent"/>
     <disable_collisions link1="Drone2" link2="Drone4" reason="Default"/>
-    <disable_collisions link1="Drone3" link2="Drone4" reason="Adjacent"/>
+    <disable_collisions link1="Drone3" link2="Drone4" reason="Adjacent"/> -->
 </robot>

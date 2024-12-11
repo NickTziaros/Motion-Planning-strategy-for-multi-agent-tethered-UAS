@@ -100,8 +100,8 @@ def generate_launch_description():
 
         # change this to select planner
         'default_planning_pipeline': 'stomp',
-        'enforce_joint_model_state_space': 'True',
-        'request_adapters' : "default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints",
+        'enforce_joint_model_state_space': 'False',
+        'request_adapters' : "default_planner_request_adapters/  default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints",
         'start_state_max_bounds_error' : 0.1 }
 
             

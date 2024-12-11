@@ -8,25 +8,25 @@ Group1:
   # min_pose_distance: 1.0
   # min_joint_config_distance: 16.0
 
-  # kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
-  # kinematics_solver_search_resolution: 0.005
-  # kinematics_solver_timeout: 10.0
-  # kinematics_solver_attempts: 10.0
-  # position_only_ik: True
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_search_resolution: 0.005
+  kinematics_solver_timeout: 10.0
+  kinematics_solver_attempts: 10.0
+  position_only_ik: True
 
 # Group1:
   # kinematics_solver: lma_kinematics_plugin/LMAKinematicsPlugin
   # kinematics_solver_search_resolution: 0.05
   # kinematics_solver_timeout: 4.0
 
-  kinematics_solver: pick_ik/PickIkPlugin
-  kinematics_solver_timeout: 1.0
-  kinematics_solver_attempts: 2.0
-  mode: local
-  position_scale: 1.0
-  rotation_scale: 0.0
-  position_threshold: 0.01
-  orientation_threshold: 1.0
-  cost_threshold: 0.0001
-  minimal_displacement_weight: 0.0001
-  gd_step_size: 0.0001
+  # kinematics_solver: pick_ik/PickIkPlugin
+  # kinematics_solver_timeout: 1.0
+  # kinematics_solver_attempts: 2.0
+  # mode: local
+  # position_scale: 1.0
+  # rotation_scale: 0.0
+  # position_threshold: 0.01
+  # orientation_threshold: 1.0
+  # cost_threshold: 0.0001
+  # minimal_displacement_weight: 0.0001
+  # gd_step_size: 0.0001

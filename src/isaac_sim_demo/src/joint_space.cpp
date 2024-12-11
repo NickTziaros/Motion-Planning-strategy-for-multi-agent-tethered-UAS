@@ -159,15 +159,72 @@ btDiscreteDynamicsWorld* configure_bullet(std::shared_ptr<planning_scene::Planni
 
   // RCLCPP_INFO(node->get_logger(),"The value of my_bool is: %s", intersects ? "true" : "false");
 
-
-
-
 }
 
 
+std::vector<std::vector<double>> calculate_cartesian_distances_with_average_matrix(
+    const trajectory_msgs::msg::JointTrajectory &trajectory,  // Trajectory input
+    const std::vector<std::string> &link_names,               // List of target links
+    const moveit::core::RobotModelPtr &robot_model,           // Robot model for FK
+    rclcpp::Logger logger                                     // ROS2 logger
+) {
+    // Check if trajectory has enough points
+    if (trajectory.points.size() < 2) {
+        RCLCPP_WARN(logger, "Trajectory must have at least 2 points to calculate Cartesian distances.");
+        return {};
+    }
 
+    // Create a RobotState to perform FK
+    moveit::core::RobotState robot_state(robot_model);
+    robot_state.setToDefaultValues();
 
+    // Initialize a vector to store total distances for each link
+    std::vector<double> total_distances(link_names.size(), 0.0);
 
+    // Map to store the previous pose for each link
+    std::vector<Eigen::Isometry3d> prev_poses(link_names.size());
+
+    // Loop through the trajectory points
+    for (size_t i = 0; i < trajectory.points.size(); ++i) {
+        // Set joint values from the trajectory
+        robot_state.setVariablePositions(trajectory.points[i].positions);
+
+        for (size_t link_idx = 0; link_idx < link_names.size(); ++link_idx) {
+            // Get the current pose of the link
+            const Eigen::Isometry3d &current_pose = robot_state.getGlobalLinkTransform(link_names[link_idx]);
+
+            if (i > 0) {
+                // Calculate the Euclidean distance from the previous pose
+                Eigen::Vector3d diff = current_pose.translation() - prev_poses[link_idx].translation();
+                double distance = diff.norm();
+
+                // Accumulate the distance
+                total_distances[link_idx] += distance;
+            }
+
+            // Update the previous pose
+            prev_poses[link_idx] = current_pose;
+        }
+    }
+
+    // Calculate the average distance
+    double total_distance_sum = 0.0;
+    for (double distance : total_distances) {
+        total_distance_sum += distance;
+    }
+    double average_distance = total_distance_sum / link_names.size();
+
+    // Create a matrix (5 rows: 4 links + 1 average, 1 column for each value)
+    std::vector<std::vector<double>> distance_matrix(5, std::vector<double>(1));
+    for (size_t i = 0; i < total_distances.size(); ++i) {
+        distance_matrix[i][0] = total_distances[i];  // Add link distances
+        // RCLCPP_INFO(logger, "Link '%s' traveled a distance of %.3f meters", link_names[i].c_str(), total_distances[i]);
+    }
+    distance_matrix[4][0] = average_distance;       // Add the average
+    // RCLCPP_INFO(logger, "Average distance traveled by all links: %.3f meters", average_distance);
+
+    return distance_matrix;
+}
 
 
 
@@ -194,13 +251,15 @@ int main(int argc, char * argv[])
   rclcpp::executors::SingleThreadedExecutor executor;
   auto start_time = node->now();
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr publisher_;
-    rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_array_publisher_;
+  // rclcpp::Publisher<moveit_msgs::msg::RobotTrajectory>::SharedPtr trajectory_publisher_;
+   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_array_publisher_;
   marker_array_publisher_ = node->create_publisher<visualization_msgs::msg::MarkerArray>("viz_const", 10);
   visualization_msgs::msg::MarkerArray marker_array;
   visualization_msgs::msg::MarkerArray marker_array2;
   rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;
   marker_pub_ = node->create_publisher<visualization_msgs::msg::Marker>("visualization_marker", 10);
   publisher_ = node->create_publisher<nav_msgs::msg::Path>("/cartesian_path_topic", 10);
+  // trajectory_publisher_ = node->create_publisher<moveit_msgs::msg::RobotTrajectory>("trajectory_isaac", 10);
   namespace rvt = rviz_visual_tools;
   // rclcpp::Publisher<moveit_msgs::msg::PlanningScene>::SharedPtr planning_scene_diff_publisher =
   //     node->create_publisher<moveit_msgs::msg::PlanningScene>("planning_scene", 1);
@@ -225,6 +284,7 @@ int main(int argc, char * argv[])
 
 
 
+  std::vector<std::string> link_names = {"Drone1", "Drone2", "Drone3", "Drone4"};
 
   bool found_ik = false;
   bool isValid = false;
@@ -249,6 +309,7 @@ int main(int argc, char * argv[])
   } else {
     RCLCPP_ERROR(node->get_logger(), "Failed to call service get_planning_scene");
   }
+
   auto dynamicsWorld = configure_bullet(planning_scene);
 
   moveit::core::GroupStateValidityCallbackFn callback_fn = [planning_scene,dynamicsWorld,&visual_tools](moveit::core::RobotState* robot_state, const moveit::core::JointModelGroup* joint_group, const double* joint_group_variable_values)
@@ -271,14 +332,14 @@ int main(int argc, char * argv[])
                                      joint_group_variable_values + joint_group->getVariableCount());
     dummy_state.setJointGroupPositions(joint_group, joint_values);
 
-    visual_tools.publishRobotState(joint_values, joint_group, rviz_visual_tools::BLUE);
-    visual_tools.trigger();
+    // visual_tools.publishRobotState(joint_values, joint_group, rviz_visual_tools::BLUE);
+    // visual_tools.trigger();
+
     // check if IK solution is in collision
     if (planning_scene->isStateColliding(dummy_state,"Group1",true)||!checkRayBoxIntersection(dummy_state,dynamicsWorld)){
-    RCLCPP_INFO(LOGGER, "not valid ik sol");
+    // RCLCPP_INFO(LOGGER, "not valid ik sol");
       return false;
     }
-
 
     return true;
 
@@ -302,7 +363,7 @@ int main(int argc, char * argv[])
   ee_pose.position.y = end_effector_state.translation().y();
   ee_pose.position.z = end_effector_state.translation().z();
 
-
+  std::vector<std::vector<double>> all_distances_matrix;
   std::vector<geometry_msgs::msg::PoseStamped> waypoints_vec;
 
   geometry_msgs::msg::PoseStamped waypoints;
@@ -365,9 +426,9 @@ int main(int argc, char * argv[])
     std::vector<double> joint_values1;
 
 
-
+    float fail_counter = 0;
+    float counter = 0;
     for (std::size_t i = 1; i < path.poses.size(); ++i){
-
       geometry_msgs::msg::Pose ik_pose;
       geometry_msgs::msg::PoseStamped ik_pose_stamped;
       ik_pose = path.poses[i].pose; 
@@ -375,7 +436,6 @@ int main(int argc, char * argv[])
       ik_pose_stamped.pose = path.poses[i].pose;
 
       kinematic_constraints::VisibilityConstraint vis_constraint_checker(robot_model); 
-      
       auto future = client_->async_send_request(request);
       if (rclcpp::spin_until_future_complete(node->get_node_base_interface(), future) == rclcpp::FutureReturnCode::SUCCESS){
         auto response = future.get();  // Access the service response
@@ -424,10 +484,10 @@ int main(int argc, char * argv[])
 
       planning_interface::MotionPlanRequest req;
       req.pipeline_id = "ompl";
-      req.planner_id = "RRTConnect";
-      // req.planner_id = "PRM";
-      req.allowed_planning_time = 30.0;
-      req.max_velocity_scaling_factor = 1.0;
+      // req.planner_id = "PRMstar";
+      req.planner_id = "PRM";
+      req.allowed_planning_time = 5.0;
+      req.max_velocity_scaling_factor = 0.6;
       req.num_planning_attempts = 20.0;
       req.group_name = "Group1";
       req.max_acceleration_scaling_factor = 1.0;
@@ -460,14 +520,11 @@ int main(int argc, char * argv[])
       position_constraint.weight = 1.0;
 
 
-
-
-
-
-
       moveit_msgs::msg::Constraints constraints;
       req.goal_constraints.clear();
-      constraints.position_constraints.push_back(position_constraint);
+      // req.path_constraints.clear();
+
+
     
     
     
@@ -478,16 +535,15 @@ int main(int argc, char * argv[])
         RCLCPP_ERROR(LOGGER, "IK valid.");
 
         req.goal_constraints.push_back(joint_goal);
-
       }
-
+      counter++;
       req.goal_constraints.push_back(constraints);
-      
       while (((!planning_pipeline->generatePlan(planning_scene, req, res) || res.error_code_.val != res.error_code_.SUCCESS)) && rclcpp::ok())
       {
         RCLCPP_INFO(LOGGER, "Failed to solve planning problem. Retrying");
+        fail_counter++;
+        counter++;
       }
-
       if(planning_scene->isPathValid(*res.trajectory_)){
       moveit_msgs::msg::MotionPlanResponse msg;
       RCLCPP_INFO(LOGGER, "Planning took %.2f seconds", res.planning_time_);
@@ -496,7 +552,12 @@ int main(int argc, char * argv[])
       RCLCPP_INFO(LOGGER, "Plan is valid");
       res.getMessage(msg);
       if (move_group_interface.execute(msg.trajectory) == true) {
+          
+          auto distances = calculate_cartesian_distances_with_average_matrix(msg.trajectory.joint_trajectory,link_names,robot_model,LOGGER);
+          all_distances_matrix.push_back(distances[4]);
+
           RCLCPP_INFO(LOGGER, "Plan executed successfully!");
+          // trajectory_publisher_->publish(msg.trajectory);
       }
       }
       else
@@ -510,19 +571,28 @@ int main(int argc, char * argv[])
 
 	
 
-    // std::cout << "Translation (x, y, z): " 
-    //         << drone4_transform.translation().x() << ", " 
-    //         << drone4_transform.translation().y() << ", " 
-    //         << drone4_transform.translation().z() << std::endl;
-    // std::cout << "Translation (x, y, z): " 
-    //         << drone3_transform.translation().x() << ", " 
-    //         << drone3_transform.translation().y() << ", " 
-    //         << drone3_transform.translation().z() << std::endl;
+
   // Shutdown ROS 
   auto end_time = node->now();
   rclcpp::Duration execution_duration = end_time - start_time;
   RCLCPP_INFO(node->get_logger(), "Execution took %f seconds and %ld nanoseconds.",
               execution_duration.seconds(), execution_duration.nanoseconds());
+  
+      double total_sum = 0.0;
+    size_t total_elements = 0;
+
+    for (const auto &row : all_distances_matrix) {
+        for (double value : row) {
+            total_sum += value;
+            total_elements++;
+        }
+    }
+  double overall_average = total_elements > 0 ? (total_sum / total_elements) : 0.0;
+  RCLCPP_INFO(node->get_logger(), "Overall Average Distance: %.3f meters", overall_average);
+  RCLCPP_INFO(node->get_logger(), "Overall  Distance: %.3f meters", total_sum);
+
+  float rate = (counter-fail_counter)/counter;
+  RCLCPP_INFO(node->get_logger(), "Float1: %.2f, Float2: %.3f,Float2: %.3f", counter, fail_counter,rate);
   rclcpp::shutdown();  
   return 0;
 }

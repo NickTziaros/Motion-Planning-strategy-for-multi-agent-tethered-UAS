@@ -188,7 +188,7 @@ Group1:
   projection_evaluator: joints(spherical_1_x,spherical_1_y,spherical_1_z,spherical_2_x,spherical_2_y,spherical_2_z,spherical_3_x,spherical_3_y,spherical_3_z,spherical_4_x,spherical_4_y,spherical_4_z)
   # do not attempt to solve path contraints in Cartesian space
   # MoveIt's implementation is broken and can generate infeasible trajectories -- v4hn
-  enforce_joint_model_state_space: True
+  enforce_joint_model_state_space: False
   longest_valid_segment_fraction: 0.01
   path_tolerance : 0.3
   resample_dt : 0.1
